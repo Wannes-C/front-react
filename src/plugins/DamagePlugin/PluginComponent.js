@@ -5,6 +5,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppContext from "@context";
 import {miniDrawerWidth} from '@styles'
 
+// import components
+import CompAssign from './CompAssign'
+import CompSearch from './CompSearch'
+import CompUpdate from './CompUpdate'
+// import button + pop-up
+import Comptest from "./test";
+
+
+
 const drawerWidth = "26%"
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,6 +49,8 @@ export default function MyPlugin() {
 
   const state = context.states[context.plugin]
 
+  
+
   return (
     <div className={classes.root}>
       {context.currentProject ? (
@@ -55,7 +66,7 @@ export default function MyPlugin() {
             <div className={classes.drawerHeader}></div>
             <div>
 
-              <Typography>This is my plugin window!</Typography>
+              <Typography>This is the damage plugin window!</Typography>
 
               <Typography>
                 Current selection:
@@ -69,36 +80,28 @@ export default function MyPlugin() {
 
               </Typography>
 
+  {/* buttons */}
+         {/* via components -> lastig */}               
 
+              <CompAssign></CompAssign>
+              <CompSearch></CompSearch>
+              <CompUpdate></CompUpdate>
+        
+        {/* via export/import -> goed!! */}      
 
-              <div>
-                <Button className={classes.button} variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "25%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={()=>assignDamage()}
-                  >Assign</Button>
-              </div>
-              <div>
-                <Button className={classes.button} variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "25%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={()=>searchDamage()}
-                  >Search</Button>
-              </div>
+              <Comptest/>
 
-              <div>
-                <Button className={classes.button} variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "25%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={()=>updateDamage()}
-                  >Update</Button>
-              </div>
+        
+        {/* in deze file -> gebrekkig */}  
 
               <div>
                 <Button className={classes.button} variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "25%", marginBottom: 10, marginTop: 10, width: 160}}
+                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
                         onClick={()=>editDamage()}
                   >Edit</Button>
               </div>
 
-
+              
 
 
             </div>
@@ -113,21 +116,10 @@ export default function MyPlugin() {
 
 
 
-function assignDamage(){
-  console.log('assign damage pop-up')
-}
 
 
-function searchDamage(){
-  console.log('search damage pop-up')
-}
-
-
-function updateDamage(){
-  console.log('update damage pop-up')
-}
 
 
 function editDamage(){
-  console.log('edit damage pop-up')
+  console.log('open edit damage pop-up')
 }
