@@ -11,8 +11,6 @@ import Typography from '@material-ui/core/Typography';
 
 
 
-
-
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -29,10 +27,11 @@ const styles = (theme) => ({
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+    <MuiDialogTitle disableTypography className={classes.root} {...other} 
+                    style={{background: '	#e92063', color:'white'}}>
+      <Typography variant="h6" >{children}</Typography>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose} style={{color:'white'}}>
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -57,18 +56,21 @@ const DialogActions = withStyles((theme) => ({
 
 
 
-
-
-
 export default function CustomizedDialogs() {
+  //states
+  ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
 
+
+  //open and close functions for pop-up
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+
 
   return (
     <div>
@@ -80,13 +82,11 @@ export default function CustomizedDialogs() {
 
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+        Edit incorrect damage information
         </DialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-            in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-          </Typography>
+          
+
           <Typography gutterBottom>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
             lacus vel augue laoreet rutrum faucibus dolor auctor.
@@ -96,10 +96,38 @@ export default function CustomizedDialogs() {
             scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
             auctor fringilla.
           </Typography>
+          <Typography gutterBottom>
+            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
+            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
+            auctor fringilla.
+          </Typography>
+          <Typography gutterBottom>
+            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
+            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
+            auctor fringilla.
+          </Typography>
+          <Typography gutterBottom>
+            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
+            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
+            auctor fringilla.
+          </Typography>
+          <Typography gutterBottom>
+            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
+            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
+            auctor fringilla.
+          </Typography>
+          <Typography gutterBottom>
+            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
+            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
+            auctor fringilla.
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Save changes
+        <Button autoFocus onClick={handleClose} size="small" color="primary">
+            Cancel
+          </Button>
+          <Button autoFocus onClick={handleClose} variant="contained" size="small" color="primary">
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

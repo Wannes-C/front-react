@@ -8,6 +8,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import '../styles.css'
 
 
 
@@ -56,24 +57,71 @@ const DialogActions = withStyles((theme) => ({
 
 
 
-
-
-
 export default function CustomizedDialogs() {
+  //states
+  ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
+  const [type, setType] = React.useState('');
 
+  //open and close functions for pop-up
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+    setType('damageType');
   };
 
-  //set Radio when klicking text
+  //set Radio and state after type selection
   const setRadio = (damageType) => {
     document.getElementById(damageType).checked = true
+      setType(damageType)
   };
 
+
+  // const testing =()=>{
+  //   console.log(type)
+  // }
+
+
+  //Change options depending on choice
+  const changeDialog = ()=>{
+    if(type === 'damageGeneral'){
+      return(
+        <p></p>
+      )
+    }
+
+    if(type === 'damageArea'){
+      return(
+        <div>
+          <Typography className='interTitleBox' gutterBottom>
+           
+            <div className='interTitle' >Damage topology</div>
+
+          </Typography>
+
+          <p>assign damage elements</p>
+          <p>assign damage pattern</p>
+        </div>
+      )
+    }
+
+    if(type === 'damageElement'){
+      return(
+        <div>
+          <Typography className='interTitleBox' gutterBottom>
+           
+            <div className='interTitle' >Damage topology</div>
+
+          </Typography>
+       
+          <p>assign adjacent element</p>
+          <p>assign to damage pattern</p>
+        </div>
+      )
+    }
+ }
 
   
 
@@ -91,25 +139,50 @@ export default function CustomizedDialogs() {
         Assign new damage
         </DialogTitle>
         <DialogContent dividers>
-          <h3>test</h3>
-          <Typography gutterBottom>
-          <form>
           
-          <div className="radio">
-            <input id="damageGeneral" type="radio" name="optradio"></input>
-            <label onClick={()=> {setRadio("damageGeneral")}}> Damage</label>
-          </div>
-          <div className="radio">
-            <input id="damageArea" type="radio" name="optradio"></input>
-            <label onClick={()=> {setRadio("damageArea")}}> Damage area </label>
-          </div>
-          <div className="radio">
-            <input id="damageElement" type="radio" name="optradio"></input> 
-            <label onClick={()=> {setRadio("damageElement")}}> Damage element </label>
-          </div>
           
-        </form>
+        <Typography className='interTitleBox' gutterBottom>
+           
+           <div className='interTitle' >Damage type</div>
+
           </Typography>
+          
+          
+          <Typography gutterBottom>
+            <form>
+              <div className="radio">
+                <input id="damageGeneral" type="radio" name="optradio"></input>
+                  <label onClick={()=> {setRadio("damageGeneral")}}> Damage</label>
+              </div>
+              <div className="radio">
+                <input id="damageArea" type="radio" name="optradio"></input>
+                  <label onClick={()=> {setRadio("damageArea")}}> Damage area </label>
+              </div>
+              <div className="radio">
+               <input id="damageElement" type="radio" name="optradio"></input> 
+                <label onClick={()=> {setRadio("damageElement")}}> Damage element </label>
+              </div>
+             </form>
+          </Typography>
+
+
+
+
+
+          <Typography gutterBottom>
+            {changeDialog()}
+            {/* {testing()} */}
+          </Typography>
+
+
+          <Typography className='interTitleBox' gutterBottom>
+           
+            <div style={{marginLeft: "10px"}} > Damage label</div>
+
+          </Typography>
+
+          
+          
           <Typography gutterBottom>
             Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
             lacus vel augue laoreet rutrum faucibus dolor auctor.

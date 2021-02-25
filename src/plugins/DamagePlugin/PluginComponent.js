@@ -4,6 +4,8 @@ import { Drawer, Typography, Slider, Button } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import AppContext from "@context";
 import {miniDrawerWidth} from '@styles'
+import './styles.css'
+
 
 // import components
 import CompAssign from './Components/CompAssign'
@@ -67,10 +69,12 @@ export default function MyPlugin() {
             <div className={classes.drawerHeader}></div>
             <div>
 
-              <Typography>This is the damage plugin window!</Typography>
-
-              <Typography>
-                Current selection:
+              <div  className="pluginTitle" style={{paddingBottom: "12px", paddingTop: "12px"}}>
+                <Typography color="secondary" style={{marginLeft: "35%", marginRight: "65%"}} > DAMAGE PLUGIN </Typography>
+              </div>
+              
+              <Typography style={{paddingTop: "20px"}}>
+                Current object selection:
                 {(context.selection.length > 0) ? (
                   context.selection.map(item => {
                     return <p> {item.guid}</p>
@@ -79,6 +83,11 @@ export default function MyPlugin() {
                   <> nothing selected</>
                 )}
 
+              </Typography>
+
+              <Typography>
+                Damages occuring to object:
+                <> no damage found</>
               </Typography>
 
   {/* buttons */}         

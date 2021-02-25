@@ -10,3 +10,40 @@
 .MuiSlider-thumb {
     border-radius: 1px;
 }
+
+
+.pluginTitle{
+    background-color:	#fafafa ;
+    color: lightcoral;
+    width: 100%;
+    height: 46px;
+    opacity: 1;
+    transition: 0.8s;
+    box-shadow: 2px 0px 10px 2px grey;
+    border-bottom: 2px solid;
+    border-color: #e92063;
+  }
+
+  
+.interTitleBox{
+    /* background-color:	#eeeeee ; */
+    color: #e92063;
+    width: 100%;
+    /* height: 30px; */
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    transition: 0.8s;
+    border-bottom: 2px solid;
+    border-color: #e92063;
+  }
+
+  /* .interTitle{
+    margin-left: 15px;
+  } */
+
+    .checkBox{
+    margin-left: 5px;
+    margin-bottom: 25px;
+  }
