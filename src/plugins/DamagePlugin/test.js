@@ -63,16 +63,19 @@ const DialogActions = withStyles((theme) => ({
 
 
 export default function CustomizedDialogs() {
-  //////////////////////////////////////////////////////////////////////////////////////STATES
+  ///////////////////////////////////////////////////////////////////////////////////////////STATES
   ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
 
   const [type, setType] = React.useState('');
-  // const [classification, setClassification] = React.useState('');
+  const [classification, setClassification] = React.useState('');
   // const [properties, setProperties] = React.useState('');
   // const [Task, setTask] = React.useState('');
   // const [Documents, setDocuments] = React.useState('');
-  // const [comment, setComment] = React.useState('');
+  const [comment, setComment] = React.useState('');
+  const [label, setLabel] = React.useState('');
+
+
 
   const [checkTopology, setCheckTopology] = React.useState(false);
   const [checkClassification, setCheckClassification] = React.useState(false);
@@ -82,13 +85,21 @@ export default function CustomizedDialogs() {
   const [checkComment, setCheckComment] = React.useState(false);
   
 
-  //open and close functions for pop-up
+  ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
   const handleClickOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
     setType('damageType');
+    setComment('');
+    setLabel('');
+    setCheckTopology('');
+    setCheckClassification('')
+    setCheckProperties('');
+    setCheckTask('');
+    setCheckDocuments('');
+    setCheckComment('');
   };
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
@@ -242,8 +253,8 @@ const optionClassification = ()=>{
           <FormControl variant="outlined" className="dropdownComponent">
             <Select
               native
-              // value={state.age}
-              // onChange={handleChange}
+              value={classification}
+              onChange={handleClassificationChange}
             >
               <option value="">No classification</option>
               <option value="crack">crack</option>
@@ -252,7 +263,6 @@ const optionClassification = ()=>{
             </Select>
           </FormControl>
         </div>
-
       </div>
     )
   } else{
@@ -261,6 +271,12 @@ const optionClassification = ()=>{
       )
     }
 }
+
+//set selected dropdown as state
+const handleClassificationChange = (event) => {
+  setClassification(event.target.value);
+};
+
 
  //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
 //check Properties
@@ -277,9 +293,8 @@ const optionProperties = ()=>{
   if(checkProperties === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -305,9 +320,8 @@ const optionTask = ()=>{
   if(checkTask === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -333,9 +347,8 @@ const optionDocuments = ()=>{
   if(checkDocuments === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -360,19 +373,21 @@ const toggleComment = () => {
 const optionComment = ()=>{
   if(checkComment === true){
     return(
-      
-      <Typography gutterBottom>
-        <form  noValidate autoComplete="off">
-        <TextField
-          className="descriptionForm"
-          id="description"
-          label="Damage description"
-          multiline
-          rows={5}
-          variant="outlined"
-        />
-        </form>
-      </Typography>
+      <div>
+        <Typography gutterBottom>
+          <form  noValidate autoComplete="off">
+          <TextField
+            className="descriptionForm"
+            id="description"
+            label="Damage description"
+            multiline
+            rows={5}
+            variant="outlined"
+            value={comment}
+            onChange={handleCommentChange}/>
+          </form>
+        </Typography>
+      </div>
 
     )
   } else{
@@ -382,6 +397,19 @@ const optionComment = ()=>{
     }
 }
 
+
+//set input as state
+const handleCommentChange = (event) => {
+  setComment(event.target.value);
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////LABEL
+
+//set input as state
+const handleLabelChange = (event) => {
+  setLabel(event.target.value);
+};
   
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
   return (
@@ -391,6 +419,8 @@ const optionComment = ()=>{
                         style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
                         onClick={handleClickOpen}
                   >test</Button>
+
+
 
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -500,8 +530,12 @@ const optionComment = ()=>{
             <div className='interTitle' > Damage label</div>
           </Typography>
           <Typography gutterBottom>
-            <TextField className="descriptionForm" id="label" label="Unique label" variant="outlined" />
+            <TextField className="descriptionForm" id="label" label="Unique name" variant="outlined" 
+                        value={label}
+                        onChange={handleLabelChange}/>
           </Typography>
+
+{/* + datum!! */}
 
 
         </DialogContent>
@@ -517,3 +551,4 @@ const optionComment = ()=>{
     </div>
   );
 }
+

@@ -13,6 +13,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import NativeSelect from "@material-ui/core/NativeSelect";
+import TextField from "@material-ui/core/TextField";
 import '../styles.css'
 
 
@@ -67,11 +68,14 @@ export default function CustomizedDialogs() {
   const [open, setOpen] = React.useState(false);
 
   const [type, setType] = React.useState('');
-  // const [classification, setClassification] = React.useState('');
+  const [classification, setClassification] = React.useState('');
   // const [properties, setProperties] = React.useState('');
   // const [Task, setTask] = React.useState('');
   // const [Documents, setDocuments] = React.useState('');
-  // const [comment, setComment] = React.useState('');
+  const [comment, setComment] = React.useState('');
+  const [label, setLabel] = React.useState('');
+
+
 
   const [checkTopology, setCheckTopology] = React.useState(false);
   const [checkClassification, setCheckClassification] = React.useState(false);
@@ -88,6 +92,8 @@ export default function CustomizedDialogs() {
   const handleClose = () => {
     setOpen(false);
     setType('damageType');
+    setComment('');
+    setLabel('');
   };
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
@@ -169,7 +175,6 @@ const optionTopologyArea = ()=>{
       <Typography gutterBottom>
       <p>assign damage elements</p>
       <p>assign damage pattern</p>
-      <p>show elements/pattern on same object</p>
     </Typography>
     )
   } else{
@@ -188,7 +193,6 @@ const optionTopologyElement = ()=>{
       <Typography gutterBottom> 
          <p>assign adjacent element</p>
          <p>assign to damage pattern</p>
-         <p>show elements/area/pattern on same object</p>
     </Typography>
     )
   } else{
@@ -224,7 +228,7 @@ const optionClassification = ()=>{
         </Typography>
         <Typography className="domain">
           <input type="checkbox" id="toggleCDO" className="checkBoxClose"></input>
-          <label for="toggleCDO" className="checkBoxClose" >Concrete Damage Ontology (CDO)</label> 
+          <label for="toggleCDO" className="checkBoxClose" >Concrete Damage Ontology (OCD)</label> 
         </Typography>
         <Typography className="domain">
           <input type="checkbox" id="toggleMWVD" className="checkBoxClose"></input>
@@ -240,16 +244,19 @@ const optionClassification = ()=>{
         </Typography>
         
         <div className="dropdown">
-          <FormControl className="dropdownComponent">
-            <NativeSelect>
+          <FormControl variant="outlined" className="dropdownComponent">
+            <Select
+              native
+              value={classification}
+              onChange={handleClassificationChange}
+            >
               <option value="">No classification</option>
               <option value="crack">crack</option>
               <option value="biological growth">biological growth</option>
               <option value="carbonation">carbonation</option>
-            </NativeSelect>
+            </Select>
           </FormControl>
         </div>
-
       </div>
     )
   } else{
@@ -258,6 +265,12 @@ const optionClassification = ()=>{
       )
     }
 }
+
+//set selected dropdown as state
+const handleClassificationChange = (event) => {
+  setClassification(event.target.value);
+};
+
 
  //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
 //check Properties
@@ -274,9 +287,8 @@ const optionProperties = ()=>{
   if(checkProperties === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -302,9 +314,8 @@ const optionTask = ()=>{
   if(checkTask === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -330,9 +341,8 @@ const optionDocuments = ()=>{
   if(checkDocuments === true){
     return(
       
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
+      <Typography className="domain" gutterBottom>
+        [under construction]
       </Typography>
 
     )
@@ -357,11 +367,21 @@ const toggleComment = () => {
 const optionComment = ()=>{
   if(checkComment === true){
     return(
-      
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
-      </Typography>
+      <div>
+        <Typography gutterBottom>
+          <form  noValidate autoComplete="off">
+          <TextField
+            className="descriptionForm"
+            id="description"
+            label="Damage description"
+            multiline
+            rows={5}
+            variant="outlined"
+            value={comment}
+            onChange={handleCommentChange}/>
+          </form>
+        </Typography>
+      </div>
 
     )
   } else{
@@ -371,6 +391,19 @@ const optionComment = ()=>{
     }
 }
 
+
+//set input as state
+const handleCommentChange = (event) => {
+  setComment(event.target.value);
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////LABEL
+
+//set input as state
+const handleLabelChange = (event) => {
+  setLabel(event.target.value);
+};
   
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
   return (
@@ -381,11 +414,13 @@ const optionComment = ()=>{
                         onClick={handleClickOpen}
                   >Assign</Button>
 
+
+
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         Assign new damage
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers style={{width: "600px"}}>
           
           
           <Typography className='interTitleBox' gutterBottom>
@@ -477,7 +512,7 @@ const optionComment = ()=>{
           </Typography>
           <Typography>
             <input type="checkbox" id="checkComment" className="checkBox" onClick={()=>toggleComment()}></input>
-            <label for="checkComment" className="checkBox" >Add additional comment</label> 
+            <label for="checkComment" className="checkBox" >Add an additional description</label> 
           </Typography>
           <Typography gutterBottom>
             {optionComment()}
@@ -489,9 +524,12 @@ const optionComment = ()=>{
             <div className='interTitle' > Damage label</div>
           </Typography>
           <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
+            <TextField className="descriptionForm" id="label" label="Unique name" variant="outlined" 
+                        value={label}
+                        onChange={handleLabelChange}/>
           </Typography>
+
+{/* + datum!! */}
 
 
         </DialogContent>
@@ -507,3 +545,4 @@ const optionComment = ()=>{
     </div>
   );
 }
+
