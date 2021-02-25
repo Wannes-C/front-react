@@ -6,10 +6,11 @@ import AppContext from "@context";
 import {miniDrawerWidth} from '@styles'
 
 // import components
-import CompAssign from './CompAssign'
-import CompSearch from './CompSearch'
-import CompUpdate from './CompUpdate'
-// import button + pop-up
+import CompAssign from './Components/CompAssign'
+import CompSearch from './Components/CompSearch'
+import CompUpdate from './Components/CompUpdate'
+import CompEdit from './Components/CompEdit'
+//import test
 import Comptest from "./test";
 
 
@@ -80,28 +81,16 @@ export default function MyPlugin() {
 
               </Typography>
 
-  {/* buttons */}
-         {/* via components -> lastig */}               
+  {/* buttons */}         
 
               <CompAssign></CompAssign>
               <CompSearch></CompSearch>
               <CompUpdate></CompUpdate>
-        
-        {/* via export/import -> goed!! */}      
+              <CompEdit></CompEdit>
 
+          {/* test */}
               <Comptest/>
-
-        
-        {/* in deze file -> gebrekkig */}  
-
-              <div>
-                <Button className={classes.button} variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={()=>editDamage()}
-                  >Edit</Button>
-              </div>
-
-              
+            
 
 
             </div>

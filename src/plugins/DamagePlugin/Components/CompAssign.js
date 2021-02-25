@@ -84,11 +84,11 @@ export default function CustomizedDialogs() {
       <Button variant="contained" size="small" color="primary" 
                         style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
                         onClick={handleClickOpen}
-                  >Test</Button>
+                  >Assign</Button>
 
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Testing
+        Assign new damage
         </DialogTitle>
         <DialogContent dividers>
           <h3>test</h3>
