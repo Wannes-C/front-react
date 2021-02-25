@@ -47,3 +47,26 @@
     margin-left: 5px;
     margin-bottom: 25px;
   }
+
+  .checkBoxClose{
+    margin-left: 5px;
+  }
+
+  .domain{
+    padding-left: 15px;
+  }
+
+  .dropdown{
+    padding-left: 15px;
+    margin-bottom: 25px;
+  }
+
+  .dropdownComponent{
+    width: 300px;
+    /* background: rgb(247, 247, 247); */
+
+  }
+
+  .descriptionForm{
+    width: 100%;
+  }

@@ -88,8 +88,7 @@ export default function CustomizedDialogs() {
           
 
           <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
+            Selecteer een schade van het object om te updaten.
           </Typography>
           <Typography gutterBottom>
             Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel

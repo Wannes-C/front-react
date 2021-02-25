@@ -111,13 +111,3 @@ export default function MyPlugin() {
     </div>
   );
 }
-
-
-
-
-
-
-
-function editDamage(){
-  console.log('open edit damage pop-up')
-}

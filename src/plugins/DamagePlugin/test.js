@@ -8,8 +8,13 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
+import TextField from "@material-ui/core/TextField";
 import './styles.css'
-
 
 
 const styles = (theme) => ({
@@ -61,7 +66,15 @@ export default function CustomizedDialogs() {
   //////////////////////////////////////////////////////////////////////////////////////STATES
   ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
+
   const [type, setType] = React.useState('');
+  // const [classification, setClassification] = React.useState('');
+  // const [properties, setProperties] = React.useState('');
+  // const [Task, setTask] = React.useState('');
+  // const [Documents, setDocuments] = React.useState('');
+  // const [comment, setComment] = React.useState('');
+
+  const [checkTopology, setCheckTopology] = React.useState(false);
   const [checkClassification, setCheckClassification] = React.useState(false);
   const [checkProperties, setCheckProperties] = React.useState(false);
   const [checkTask, setCheckTask] = React.useState(false);
@@ -88,44 +101,105 @@ export default function CustomizedDialogs() {
 
 
   //////////////////////////////////////////////////////////////////////////////////////TOPOLOGY
-  //display ontology
-  const optionTopology = ()=>{
-    if(type === 'damageGeneral'){
+    //enable ontology (based on damage option)
+    const enableTopology = ()=>{
+      if(type === 'damageGeneral'){
+        return(
+          <p></p>
+        )
+      }
+  
+
+      if(type === 'damageArea'){
+        return(
+          <div>
+            <Typography className='interTitleBox' gutterBottom>
+              <div className='interTitle' >Damage topology</div>
+            </Typography>
+            <Typography>
+              <input type="checkbox" id="checkTopology" className="checkBox" onClick={()=>toggleTopology()}></input>
+              <label for="checkTopology" className="checkBox" >Further specify damage topology</label> 
+            </Typography>
+            <Typography gutterBottom>
+              {optionTopologyArea()}
+            </Typography>
+          </div>
+        )
+      }
+  
+
+      if(type === 'damageElement'){
+        return(
+          <div>
+            <Typography className='interTitleBox' gutterBottom>
+              <div className='interTitle' >Damage topology</div>
+            </Typography>
+            <Typography>
+              <input type="checkbox" id="checkTopology" className="checkBox" onClick={()=>toggleTopology()}></input>
+              <label for="checkTopology" className="checkBox" >Further specify damage topology</label> 
+            </Typography>
+            <Typography gutterBottom>
+              {optionTopologyElement()}
+            </Typography>
+          </div>
+        )
+      }
+   }
+  
+  
+  
+  
+  
+  
+  //check Topology (based on check)
+ const toggleTopology = () => {
+  if(document.getElementById("checkTopology").checked===true){
+    setCheckTopology(true)
+   }else{
+     setCheckTopology(false)
+   }
+};
+
+
+
+//display Topology (based on check) for damage AREA
+const optionTopologyArea = ()=>{
+  if(checkTopology === true){
+    return(
+      
+      <Typography gutterBottom>
+      <p>assign damage elements</p>
+      <p>assign damage pattern</p>
+    </Typography>
+    )
+  } else{
       return(
         <p></p>
       )
     }
+}
 
-    if(type === 'damageArea'){
+
+//display Topology (based on check) for damage ELEMENT
+const optionTopologyElement = ()=>{
+  if(checkTopology === true){
+    return(
+      
+      <Typography gutterBottom> 
+         <p>assign adjacent element</p>
+         <p>assign to damage pattern</p>
+    </Typography>
+    )
+  } else{
       return(
-        <div>
-          <Typography className='interTitleBox' gutterBottom>
-           
-            <div className='interTitle' >Damage topology</div>
-
-          </Typography>
-
-          <p>assign damage elements</p>
-          <p>assign damage pattern</p>
-        </div>
+        <p></p>
       )
     }
+}
+  
+  
+  
 
-    if(type === 'damageElement'){
-      return(
-        <div>
-          <Typography className='interTitleBox' gutterBottom>
-           
-            <div className='interTitle' >Damage topology</div>
-
-          </Typography>
-       
-          <p>assign adjacent element</p>
-          <p>assign to damage pattern</p>
-        </div>
-      )
-    }
- }
 
 
  //////////////////////////////////////////////////////////////////////////////////////CLASSIFICATION
@@ -142,12 +216,44 @@ export default function CustomizedDialogs() {
 const optionClassification = ()=>{
   if(checkClassification === true){
     return(
-      
-      <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
-    </Typography>
+      <div>
 
+        <Typography className="domain">
+          Select ontologies for obtaining classification options
+        </Typography>
+        <Typography className="domain">
+          <input type="checkbox" id="toggleCDO" className="checkBoxClose"></input>
+          <label for="toggleCDO" className="checkBoxClose" >Concrete Damage Ontology (OCD)</label> 
+        </Typography>
+        <Typography className="domain">
+          <input type="checkbox" id="toggleMWVD" className="checkBoxClose"></input>
+          <label for="toggleMWVD" className="checkBoxClose" >MWV Damage Ontology (MVW-D)</label> 
+        </Typography>
+        <Typography className="domain">
+          <input type="checkbox" id="toggleMDCSO" className="checkBox"></input>
+          <label for="toggleMDCSO" className="checkBox" >MDCS Atlas Damage Ontology (MDCS-O)</label> 
+        </Typography>
+
+        <Typography className="domain">
+          Assign a classification from the list
+        </Typography>
+        
+        <div className="dropdown">
+          <FormControl variant="outlined" className="dropdownComponent">
+            <Select
+              native
+              // value={state.age}
+              // onChange={handleChange}
+            >
+              <option value="">No classification</option>
+              <option value="crack">crack</option>
+              <option value="biological growth">biological growth</option>
+              <option value="carbonation">carbonation</option>
+            </Select>
+          </FormControl>
+        </div>
+
+      </div>
     )
   } else{
       return(
@@ -174,7 +280,7 @@ const optionProperties = ()=>{
       <Typography gutterBottom>
         Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
         lacus vel augue laoreet rutrum faucibus dolor auctor.
-    </Typography>
+      </Typography>
 
     )
   } else{
@@ -202,7 +308,7 @@ const optionTask = ()=>{
       <Typography gutterBottom>
         Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
         lacus vel augue laoreet rutrum faucibus dolor auctor.
-    </Typography>
+      </Typography>
 
     )
   } else{
@@ -230,7 +336,7 @@ const optionDocuments = ()=>{
       <Typography gutterBottom>
         Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
         lacus vel augue laoreet rutrum faucibus dolor auctor.
-    </Typography>
+      </Typography>
 
     )
   } else{
@@ -256,9 +362,17 @@ const optionComment = ()=>{
     return(
       
       <Typography gutterBottom>
-        Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-        lacus vel augue laoreet rutrum faucibus dolor auctor.
-    </Typography>
+        <form  noValidate autoComplete="off">
+        <TextField
+          className="descriptionForm"
+          id="description"
+          label="Damage description"
+          multiline
+          rows={5}
+          variant="outlined"
+        />
+        </form>
+      </Typography>
 
     )
   } else{
@@ -282,29 +396,26 @@ const optionComment = ()=>{
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
         Assign new damage
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers style={{width: "600px"}}>
           
           
-        <Typography className='interTitleBox' gutterBottom>
-           
-           <div className='interTitle' >Damage type</div>
-
+          <Typography className='interTitleBox' gutterBottom>
+            <div className='interTitle' >Damage type</div>
           </Typography>
           
-          
-          <Typography gutterBottom>
+          <Typography className ="domain" gutterBottom>
             <form>
               <div className="radio">
                 <input id="damageGeneral" type="radio" name="optradio" onClick={()=> {setRadio("damageGeneral")}}></input>
-                  <label onClick={()=> {setRadio("damageGeneral")}}> Damage</label>
+                  <label for="damageGeneral"> Damage</label>
               </div>
               <div className="radio">
                 <input id="damageArea" type="radio" name="optradio" onClick={()=> {setRadio("damageArea")}}></input>
-                  <label onClick={()=> {setRadio("damageArea")}}> Damage area </label>
+                  <label for="damageArea"> Damage area </label>
               </div>
               <div className="radio">
                <input id="damageElement" type="radio" name="optradio" onClick={()=> {setRadio("damageElement")}}></input> 
-                <label onClick={()=> {setRadio("damageElement")}}> Damage element </label>
+                <label for="damageElement"> Damage element </label>
               </div>
              </form>
           </Typography>
@@ -312,13 +423,11 @@ const optionComment = ()=>{
 
 
 
-
           <Typography gutterBottom>
-            {optionTopology()}
+            {enableTopology()}
           </Typography>
 
  
-
 
 
           <Typography className='interTitleBox' gutterBottom>
@@ -379,7 +488,7 @@ const optionComment = ()=>{
           </Typography>
           <Typography>
             <input type="checkbox" id="checkComment" className="checkBox" onClick={()=>toggleComment()}></input>
-            <label for="checkComment" className="checkBox" >Add additional comment</label> 
+            <label for="checkComment" className="checkBox" >Add an additional description</label> 
           </Typography>
           <Typography gutterBottom>
             {optionComment()}
@@ -390,10 +499,8 @@ const optionComment = ()=>{
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > Damage label</div>
           </Typography>
-
           <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
+            <TextField className="descriptionForm" id="label" label="Unique label" variant="outlined" />
           </Typography>
 
 
