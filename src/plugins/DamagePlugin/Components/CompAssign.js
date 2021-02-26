@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import AppContext from "@context";
+
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,12 +10,10 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import NativeSelect from "@material-ui/core/NativeSelect";
 import TextField from "@material-ui/core/TextField";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import '../styles.css'
 
 
@@ -63,9 +63,11 @@ const DialogActions = withStyles((theme) => ({
 
 
 export default function CustomizedDialogs() {
-  //////////////////////////////////////////////////////////////////////////////////////STATES
+  ///////////////////////////////////////////////////////////////////////////////////////////STATES
   ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const { context, setContext } = useContext(AppContext);
 
   const [type, setType] = React.useState('');
   const [classification, setClassification] = React.useState('');
@@ -74,6 +76,9 @@ export default function CustomizedDialogs() {
   // const [Documents, setDocuments] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
+  const [date, setDate] = React.useState('');
+  const [objectGuid, setObjectGuid] = React.useState('');
+
 
 
 
@@ -85,15 +90,40 @@ export default function CustomizedDialogs() {
   const [checkComment, setCheckComment] = React.useState(false);
   
 
-  //open and close functions for pop-up
+  ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
   const handleClickOpen = () => {
-    setOpen(true);
+    if (context.selection[0] !== undefined) {
+      setOpen(true);
+      setObjectGuid(context.selection[0].guid);
+    } else{
+      setOpenAlert(true);
+    }
   };
+
+
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+
+
   const handleClose = () => {
     setOpen(false);
     setType('damageType');
     setComment('');
     setLabel('');
+    setDate('');
+    setCheckTopology('');
+    setCheckClassification('')
+    setCheckProperties('');
+    setCheckTask('');
+    setCheckDocuments('');
+    setCheckComment('');
+  };
+
+
+  //open/close alert
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
   };
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
@@ -404,7 +434,13 @@ const handleCommentChange = (event) => {
 const handleLabelChange = (event) => {
   setLabel(event.target.value);
 };
+
+
+const handleDateChange = (event) => {
+  setDate(event.target.value)
+};
   
+
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
   return (
     <div>
@@ -422,6 +458,10 @@ const handleLabelChange = (event) => {
         </DialogTitle>
         <DialogContent dividers style={{width: "600px"}}>
           
+
+          <Typography style={{paddingBottom: "15px"}} gutterBottom>
+            Object GUID: {objectGuid}
+          </Typography>
           
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' >Damage type</div>
@@ -521,15 +561,30 @@ const handleLabelChange = (event) => {
 
 
           <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' > Damage label</div>
+            <div className='interTitle' > Additional information</div>
           </Typography>
-          <Typography gutterBottom>
+          {/* <Typography gutterBottom>
             <TextField className="descriptionForm" id="label" label="Unique name" variant="outlined" 
                         value={label}
                         onChange={handleLabelChange}/>
+          </Typography> */}
+
+          <Typography gutterBottom>
+            <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
+                        value={label}
+                        onChange={handleLabelChange}/>
+           
+            <TextField className="dateForm" id="date" variant="outlined" 
+                        type="date"     
+                        value={date}
+                        onChange={handleDateChange}
+                        />
           </Typography>
 
-{/* + datum!! */}
+          <Typography>
+            <input type="checkbox" id="checkNewState" className="checkBox"></input>
+            <label for="checkNewState" className="checkBox" >Assign new damage state to object</label> 
+          </Typography>
 
 
         </DialogContent>
@@ -542,6 +597,50 @@ const handleLabelChange = (event) => {
           </Button>
         </DialogActions>
       </Dialog>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      <div>
+      <Dialog
+        open={openAlert}
+        onClose={handleCloseAlert}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please select an object first
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseAlert} color="primary" autoFocus>
+            Accept
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     </div>
   );
 }

@@ -13,7 +13,7 @@ import CompSearch from './Components/CompSearch'
 import CompUpdate from './Components/CompUpdate'
 import CompEdit from './Components/CompEdit'
 //import test
-import Comptest from "./test";
+import Comptest from "./Components/test";
 
 
 
@@ -94,6 +94,7 @@ export default function MyPlugin() {
 
               <CompAssign></CompAssign>
               <CompSearch></CompSearch>
+                  {/* e.g. display overview of damage history, search on damage name to select its object,... */}
               <CompUpdate></CompUpdate>
               <CompEdit></CompEdit>
 

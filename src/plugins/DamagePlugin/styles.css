@@ -70,3 +70,16 @@
   .descriptionForm{
     width: 100%;
   }
+
+  .nameForm{
+    width: 70%;
+  }
+  .dateForm{
+    width: 30%;
+  }
+
+
+  .delete{
+    padding-left: 15px;
+    padding-bottom: 25px;
+  }

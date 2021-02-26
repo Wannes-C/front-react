@@ -13,8 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import '../styles.css'
+import './styles.css'
 
 
 const styles = (theme) => ({
@@ -66,10 +65,8 @@ export default function CustomizedDialogs() {
   ///////////////////////////////////////////////////////////////////////////////////////////STATES
   ////const[state-element, function to change state] = React.useState(defailt value)
   const [open, setOpen] = React.useState(false);
-  const [openAlert, setOpenAlert] = React.useState(false);
   const { context, setContext } = useContext(AppContext);
 
-  const [damageSelection, setDamageSelection] = React.useState('');
   const [type, setType] = React.useState('');
   const [classification, setClassification] = React.useState('');
   // const [properties, setProperties] = React.useState('');
@@ -96,8 +93,6 @@ export default function CustomizedDialogs() {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
-    } else{
-      setOpenAlert(true);
     }
   };
 
@@ -119,25 +114,7 @@ export default function CustomizedDialogs() {
     setCheckTask('');
     setCheckDocuments('');
     setCheckComment('');
-    setDamageSelection('');
   };
-
-
-  //open/close alert
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-
-  //////////////////////////////////////////////////////////////////////////////////////DAMAGE SELECTION
-
-//set selected dropdown as state
-const handleDamageSelection = (event) => {
-  setDamageSelection(event.target.value);
-};
-
-const deleteDamage = ()=>{
-    handleClose()
-}
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
   //set Radio and state after type selection
@@ -452,25 +429,30 @@ const handleLabelChange = (event) => {
 const handleDateChange = (event) => {
   setDate(event.target.value)
 };
+  
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DISPLAY IF DAMAGE SELECTED
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
+  return (
+    <div>
 
-const optionUpdate = ()=>{
-  if(damageSelection === ''){
-    return(
-      <p></p>
-    )
-  } else{
-      return(
-        <div>
-
-          <div className="delete">
-            <Button autoFocus variant="contained" size="small" color="primary" onClick={()=>deleteDamage()}>
-              Delete Permanently
-            </Button>
-          </div>
+      <Button variant="contained" size="small" color="primary" 
+                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
+                        onClick={handleClickOpen}
+                  >test</Button>
 
 
+
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        Assign new damage
+        </DialogTitle>
+        <DialogContent dividers style={{width: "600px"}}>
+          
+
+          <Typography gutterBottom>
+            {objectGuid}
+          </Typography>
+          
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' >Damage type</div>
           </Typography>
@@ -571,6 +553,11 @@ const optionUpdate = ()=>{
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > Additional information</div>
           </Typography>
+          {/* <Typography gutterBottom>
+            <TextField className="descriptionForm" id="label" label="Unique name" variant="outlined" 
+                        value={label}
+                        onChange={handleLabelChange}/>
+          </Typography> */}
 
           <Typography gutterBottom>
             <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
@@ -589,58 +576,7 @@ const optionUpdate = ()=>{
             <label for="checkNewState" className="checkBox" >Assign new damage state to object</label> 
           </Typography>
 
-        </div>
-      )
-    }
-}
-
-  
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
-  return (
-    <div>
-
-      <Button variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={handleClickOpen}
-                  >Edit</Button>
-
-
-
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Edit incorrect or incomplete damage
-        </DialogTitle>
-        <DialogContent dividers style={{width: "600px"}}>
-          
-
-          <Typography style={{paddingBottom: "15px"}} gutterBottom>
-            Object GUID: {objectGuid}
-          </Typography>
-
-
-
-
-          <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent">
-            <Select
-              native
-              value={damageSelection}
-              onChange={handleDamageSelection}
-            >
-              <option value="">No damage selected</option>
-              <option value="Damage_Area_1">Damage_Area_1</option>
-              <option value="Damage_Area_2">Damage_Area_2</option>
-              <option value="Damage_Element1">Damage_Element1</option>
-            </Select>
-          </FormControl>
-        </div>
-
-
-        <Typography gutterBottom>
-          {optionUpdate()}
-        </Typography>
-
+{/* + datum!! */}
 
 
         </DialogContent>
@@ -653,50 +589,6 @@ const optionUpdate = ()=>{
           </Button>
         </DialogActions>
       </Dialog>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-      <div>
-      <Dialog
-        open={openAlert}
-        onClose={handleCloseAlert}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Please select an object first
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAlert} color="primary" autoFocus>
-            Accept
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     </div>
   );
 }
