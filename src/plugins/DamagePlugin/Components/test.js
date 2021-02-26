@@ -97,6 +97,18 @@ export default function CustomizedDialogs() {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
+
+      setType('damageType');
+      setComment('');
+      setLabel('');
+      setDate('');
+      setCheckTopology('');
+      setCheckClassification('')
+      setCheckProperties('');
+      setCheckTask('');
+      setCheckDocuments('');
+      setCheckComment('');
+
     } else{
       setOpenAlert(true);
     }
@@ -110,23 +122,13 @@ export default function CustomizedDialogs() {
 
   const handleClose = () => {
     setOpen(false);
-    setType('damageType');
-    setComment('');
-    setLabel('');
-    setDate('');
-    setCheckTopology('');
-    setCheckClassification('')
-    setCheckProperties('');
-    setCheckTask('');
-    setCheckDocuments('');
-    setCheckComment('');
   };
 
 
   //open/close alert
   const handleCloseAlert = () => {
     setOpenAlert(false);
-  };
+    };
 
 
 
@@ -471,6 +473,17 @@ const handleDateChange = (event) => {
   setDate(event.target.value)
 };
 
+//////////////////////////////////////////////////////////////////////////////////////SUBMIT
+
+
+const handleSubmit = () => {
+
+  //execute query functions
+
+  setOpen(false);
+};
+
+
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
   return (
     <div>
@@ -623,7 +636,7 @@ const handleDateChange = (event) => {
         <Button autoFocus onClick={handleClose} size="small" color="primary">
             Cancel
           </Button>
-          <Button autoFocus onClick={handleClose} variant="contained" size="small" color="primary">
+          <Button autoFocus onClick={handleSubmit} variant="contained" size="small" color="primary">
             Submit
           </Button>
         </DialogActions>

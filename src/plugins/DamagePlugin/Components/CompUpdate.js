@@ -16,6 +16,8 @@ import TextField from "@material-ui/core/TextField";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import '../styles.css'
 
+import {queryMultiple} from 'lbd-server'
+
 
 const styles = (theme) => ({
   root: {
@@ -96,6 +98,18 @@ export default function CustomizedDialogs() {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
+
+      setType('damageType');
+      setComment('');
+      setLabel('');
+      setDate('');
+      setCheckTopology('');
+      setCheckClassification('')
+      setCheckProperties('');
+      setCheckTask('');
+      setCheckDocuments('');
+      setCheckComment('');
+      setDamageSelection('');
     } else{
       setOpenAlert(true);
     }
@@ -109,17 +123,6 @@ export default function CustomizedDialogs() {
 
   const handleClose = () => {
     setOpen(false);
-    setType('damageType');
-    setComment('');
-    setLabel('');
-    setDate('');
-    setCheckTopology('');
-    setCheckClassification('')
-    setCheckProperties('');
-    setCheckTask('');
-    setCheckDocuments('');
-    setCheckComment('');
-    setDamageSelection('');
   };
 
 
@@ -139,11 +142,42 @@ const deleteDamage = ()=>{
     handleClose()
 }
 
+//////////////////////////////////////////////////////////////////////////////////////QUERY OBJECT URI
+const [objectURI, setObjectURI] = React.useState('');
+
+
+const queryObjectURI = `PREFIX props: <https://w3id.org/props#>
+PREFIX bot: <https://w3id.org/bot#>
+PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
+PREFIX schema: <http://schema.org/>
+SELECT ?obj
+WHERE {
+    ?obj props:globalIdIfcRoot/schema:value "${objectGuid}" .
+}`
+
+async function executeQueryObjectURI (query) {
+  try {
+    let token
+    if (context.user && context.user.token) {
+      token = context.user.token
+    }
+      const results = await queryMultiple(context.currentProject.id, query, context.currentProject.activeGraphs, token)
+      setObjectURI(results.results.bindings[0].obj.value)
+      //object URI as objURI.results.bindings[0].obj.value
+  } catch (error) {
+      console.log('error', error)
+  }
+}
+
   //////////////////////////////////////////////////////////////////////////////////////TYPE
   //set Radio and state after type selection
   const setRadio = (damageType) => {
     document.getElementById(damageType).checked = true
       setType(damageType)
+
+            // starts defining object URI
+            executeQueryObjectURI (queryObjectURI);
+ 
   };
 
 
@@ -453,6 +487,19 @@ const handleDateChange = (event) => {
   setDate(event.target.value)
 };
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////SUBMIT
+
+
+const handleSubmit = () => {
+
+  //execute query functions
+
+  setOpen(false);
+};
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DISPLAY IF DAMAGE SELECTED
 
 const optionUpdate = ()=>{
@@ -648,7 +695,7 @@ const optionUpdate = ()=>{
         <Button autoFocus onClick={handleClose} size="small" color="primary">
             Cancel
           </Button>
-          <Button autoFocus onClick={handleClose} variant="contained" size="small" color="primary">
+          <Button autoFocus onClick={handleSubmit} variant="contained" size="small" color="primary">
             Submit
           </Button>
         </DialogActions>
