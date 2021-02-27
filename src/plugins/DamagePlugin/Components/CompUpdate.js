@@ -14,9 +14,19 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import Switch from '@material-ui/core/Switch';
+import Grid from '@material-ui/core/Grid';
+import FormGroup from '@material-ui/core/FormGroup';
 import '../styles.css'
 
 import {queryMultiple} from 'lbd-server'
+
+//import ontology-classes for classification
+import MWVDTimberclasses from './ClassesOntologies/TimberMWVD'
+import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
+import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
+import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
+import CDOclasses from './ClassesOntologies/ConcreteCDO'
 
 
 const styles = (theme) => ({
@@ -73,7 +83,10 @@ export default function CustomizedDialogs() {
 
   const [damageSelection, setDamageSelection] = React.useState('');
   const [type, setType] = React.useState('');
+  const [defectStructuralSwitch, setDefectStructuralSwitch] = React.useState({checkedA: false});
+  const [defectStructural, setDefectStructural] = React.useState('Defect');
   const [classification, setClassification] = React.useState('');
+  const [classificationOptions, setClassificationOptions] = React.useState([]);
   // const [properties, setProperties] = React.useState('');
   // const [Task, setTask] = React.useState('');
   // const [Documents, setDocuments] = React.useState('');
@@ -99,7 +112,9 @@ export default function CustomizedDialogs() {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
 
-      setType('damageType');
+      setType('');
+      setDefectStructuralSwitch({checkedA: false})
+      setDefectStructural('Defect');
       setComment('');
       setLabel('');
       setDate('');
@@ -110,6 +125,8 @@ export default function CustomizedDialogs() {
       setCheckDocuments('');
       setCheckComment('');
       setDamageSelection('');
+      setClassificationOptions([])
+
     } else{
       setOpenAlert(true);
     }
@@ -180,19 +197,28 @@ async function executeQueryObjectURI (query) {
  
   };
 
+  const handleSwitchChange = (event) => {
+    setDefectStructuralSwitch({ ...defectStructuralSwitch, [event.target.name]: event.target.checked });
+       
+    if(defectStructuralSwitch.checkedA === false){
+      setDefectStructural("StructuralDamage")
+    }
+    if(defectStructuralSwitch.checkedA === true){
+      setDefectStructural("Defect")
+    }
+  };
+
 
 
   //////////////////////////////////////////////////////////////////////////////////////TOPOLOGY
     //enable ontology (based on damage option)
     const enableTopology = ()=>{
-      if(type === 'damageGeneral'){
-        return(
-          <p></p>
-        )
+      if(type === 'Damage'){
+        return
       }
   
 
-      if(type === 'damageArea'){
+      if(type === 'DamageArea'){
         return(
           <div>
             <Typography className='interTitleBox' gutterBottom>
@@ -200,7 +226,7 @@ async function executeQueryObjectURI (query) {
             </Typography>
             <Typography>
               <input type="checkbox" id="checkTopology" className="checkBox" onClick={()=>toggleTopology()}></input>
-              <label for="checkTopology" className="checkBox" >Further specify damage topology</label> 
+              <label for="checkTopology" className="checkBox" >Specify damage topology</label> 
             </Typography>
             <Typography gutterBottom>
               {optionTopologyArea()}
@@ -210,7 +236,7 @@ async function executeQueryObjectURI (query) {
       }
   
 
-      if(type === 'damageElement'){
+      if(type === 'DamageElement'){
         return(
           <div>
             <Typography className='interTitleBox' gutterBottom>
@@ -286,66 +312,128 @@ const optionTopologyElement = ()=>{
 
  //////////////////////////////////////////////////////////////////////////////////////CLASSIFICATION
 //check Classification
- const toggleClassification = () => {
-   if(document.getElementById("checkClassification").checked===true){
-     setCheckClassification(true)
-    }else{
-      setCheckClassification(false)
-    }
+const toggleClassification = () => {
+  if(document.getElementById("checkClassification").checked===true){
+    setCheckClassification(true)
+    setClassificationOptions([])
+   }else{
+     setCheckClassification(false)
+     setClassification('')
+   }
 };
+
 
 //display classification
 const optionClassification = ()=>{
-  if(checkClassification === true){
-    return(
-      <div>
+ if(checkClassification === true){
+   return(
+     <div>
 
-        <Typography className="domain">
-          Select ontologies for obtaining classification options
-        </Typography>
-        <Typography className="domain">
-          <input type="checkbox" id="toggleCDO" className="checkBoxClose"></input>
-          <label for="toggleCDO" className="checkBoxClose" >Concrete Damage Ontology (OCD)</label> 
-        </Typography>
-        <Typography className="domain">
-          <input type="checkbox" id="toggleMWVD" className="checkBoxClose"></input>
-          <label for="toggleMWVD" className="checkBoxClose" >MWV Damage Ontology (MVW-D)</label> 
-        </Typography>
-        <Typography className="domain">
-          <input type="checkbox" id="toggleMDCSO" className="checkBox"></input>
-          <label for="toggleMDCSO" className="checkBox" >MDCS Atlas Damage Ontology (MDCS-O)</label> 
-        </Typography>
+       <Typography className="domain">
+         Select ontologies for obtaining classification options
+       </Typography>
+       <Typography className="domain">
+         <input type="checkbox" id="toggleCDO" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+         <label for="toggleCDO" className="checkBoxClose" >Concrete Damage (CDO)</label> 
+       </Typography>
+       <Typography className="domain">
+         <input type="checkbox" id="toggleMWVDTimber" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+         <label for="toggleMWVDTimber" className="checkBoxClose" >Timber damage (MVW-D)</label> 
+       </Typography>
+       <Typography className="domain">
+         <input type="checkbox" id="toggleMWVDNaturalStone" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+         <label for="toggleMWVDNaturalStone" className="checkBox" >Natural stone damage (MVW-D)</label> 
+       </Typography>
+       <Typography className="domain">
+         <input type="checkbox" id="toggleMWVDPaper" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+         <label for="toggleMWVDPaper" className="checkBox" >Paper damage (MVW-D)</label> 
+       </Typography>
+       <Typography className="domain">
+         <input type="checkbox" id="toggleMWVDTextile" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
+         <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
+       </Typography>
 
-        <Typography className="domain">
-          Assign a classification from the list
-        </Typography>
-        
-        <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent">
-            <Select
-              native
-              value={classification}
-              onChange={handleClassificationChange}
-            >
-              <option value="">No classification</option>
-              <option value="crack">crack</option>
-              <option value="biological growth">biological growth</option>
-              <option value="carbonation">carbonation</option>
-            </Select>
-          </FormControl>
-        </div>
-      </div>
-    )
-  } else{
-      return(
-        <p></p>
-      )
-    }
+
+       <Typography className="domain">
+         Assign a classification from the list
+       </Typography>
+       
+       <div className="dropdown">
+         <FormControl variant="outlined" className="dropdownComponent">
+           <Select
+             native
+             value={classification}
+             onChange={handleClassificationChange}
+           >
+             <option value="">No classification</option>
+             {myClassificationOptions}
+
+           </Select>
+         </FormControl>
+       </div>
+     </div>
+   )
+ } else{
+     return(
+       <p></p>
+     )
+   }
 }
+
+
+
+
+//define dropdown option
+
+const defineClassificationOptions = ()=>{
+ if (document.getElementById("toggleCDO").checked===true) {
+   var OptionCDO = CDOclasses
+ } else {
+   var OptionCDO = []
+ }
+ 
+ 
+ if (document.getElementById("toggleMWVDTimber").checked===true) {
+   var OptionMWVDTimber = MWVDTimberclasses
+ } else {
+   var OptionMWVDTimber = []
+ }
+ 
+ 
+ if (document.getElementById("toggleMWVDNaturalStone").checked===true) {
+   var OptionMWVDNaturalSTone = MWVDNaturalStoneclasses
+ } else {
+   var OptionMWVDNaturalSTone = []
+ }
+ 
+ 
+ if (document.getElementById("toggleMWVDPaper").checked===true) {
+   var OptionMWVDPaper = MWVDPaperclasses
+ } else {
+   var OptionMWVDPaper = []
+ }
+ 
+ 
+ if (document.getElementById("toggleMWVDTextile").checked===true) {
+   var OptionMWVDTextile = MWVDTextileclasses
+ } else {
+   var OptionMWVDTextile =[]
+ }
+ 
+ setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
+}
+
+
+//convert to dropdown
+let myClassificationOptions = classificationOptions.map((element, i) => {
+ return <option value= {element} key={i}>{element}</option>
+})
+
+
 
 //set selected dropdown as state
 const handleClassificationChange = (event) => {
-  setClassification(event.target.value);
+ setClassification(event.target.value);
 };
 
 
@@ -437,6 +525,7 @@ const toggleComment = () => {
     setCheckComment(true)
    }else{
      setCheckComment(false)
+     setComment('')
    }
 };
 
@@ -525,21 +614,46 @@ const optionUpdate = ()=>{
           <Typography className ="domain" gutterBottom>
             <form>
               <div className="radio">
-                <input id="damageGeneral" type="radio" name="optradio" onClick={()=> {setRadio("damageGeneral")}}></input>
-                  <label for="damageGeneral"> Damage</label>
+                <input id="Damage" type="radio" name="optradio" onClick={()=> {setRadio("Damage")}}></input>
+                  <label for="Damage"> Damage</label>
               </div>
               <div className="radio">
-                <input id="damageArea" type="radio" name="optradio" onClick={()=> {setRadio("damageArea")}}></input>
-                  <label for="damageArea"> Damage area </label>
+                <input id="DamageArea" type="radio" name="optradio" onClick={()=> {setRadio("DamageArea")}}></input>
+                  <label for="DamageArea"> Damage area </label>
               </div>
               <div className="radio">
-               <input id="damageElement" type="radio" name="optradio" onClick={()=> {setRadio("damageElement")}}></input> 
-                <label for="damageElement"> Damage element </label>
+               <input id="DamageElement" type="radio" name="optradio" onClick={()=> {setRadio("DamageElement")}}></input> 
+                <label for="DamageElement"> Damage element </label>
               </div>
              </form>
           </Typography>
 
 
+          <div>
+            <FormGroup className ="switch">
+              <Typography component="div">
+                <Grid component="label" container alignItems="center" spacing={1}>
+                  
+                  <Grid item>Defect</Grid>
+                  
+                  <Grid item>
+                    <Switch
+                      checked={defectStructuralSwitch.checkedA}
+                      onChange={handleSwitchChange}
+                      name="checkedA"
+                      color="default"
+                      // color="primary"
+                      inputProps={{ "aria-label": "secondary checkbox" }}
+                      label="Uncontrolled"
+                    />
+                  </Grid>
+                
+                  <Grid item>Structural Damage</Grid>
+                
+                </Grid>
+              </Typography>
+            </FormGroup>
+          </div>
 
 
           <Typography gutterBottom>

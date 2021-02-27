@@ -59,10 +59,11 @@
   .dropdown{
     padding-left: 15px;
     margin-bottom: 25px;
+
   }
 
   .dropdownComponent{
-    width: 300px;
+    width: 100%;
     /* background: rgb(247, 247, 247); */
 
   }
@@ -82,4 +83,10 @@
   .delete{
     padding-left: 15px;
     padding-bottom: 25px;
+  }
+
+  .switch{
+    padding-left: 26%;
+    padding-bottom: 15px;
+    padding-top: 15px;
   }
