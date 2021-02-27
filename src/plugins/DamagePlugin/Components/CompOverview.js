@@ -10,13 +10,10 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
+import DialogContentText from "@material-ui/core/DialogContentText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import DialogContentText from "@material-ui/core/DialogContentText";
-
 import '../styles.css'
-
-import {queryMultiple} from 'lbd-server'
 
 
 
@@ -71,21 +68,19 @@ export default function CustomizedDialogs() {
   const [open, setOpen] = React.useState(false);
   const [openAlert, setOpenAlert] = React.useState(false);
   const { context, setContext } = useContext(AppContext);
-
-  const [stateSelection, setStateSelection] = React.useState('');
-  const [damageSelection, setDamageSelection] = React.useState('');
-
   const [objectGuid, setObjectGuid] = React.useState('');
+  const [stateSelection, setStateSelection] = React.useState('');
 
-  
 
-  ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
+
+    ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
+  //open and close functions for pop-up
   const handleClickOpen = () => {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
 
-      setDamageSelection('');
+      setStateSelection('')
 
 
     } else{
@@ -94,9 +89,6 @@ export default function CustomizedDialogs() {
   };
 
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
 
 
   const handleClose = () => {
@@ -104,72 +96,72 @@ export default function CustomizedDialogs() {
   };
 
 
-  //open/close alert
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
+    //open/close alert
+    const handleCloseAlert = () => {
+      setOpenAlert(false);
+    };
 
-//////////////////////////////////////////////////////////////////////////////////////STATE SELECTION
+//////////////////////////////////////////////////////////////////////////////////////DAMAGE HISTORY
+
 
 //set selected dropdown as state
 const handleStateSelection = (event) => {
   setStateSelection(event.target.value);
 };
 
-
- 
-  
-//////////////////////////////////////////////////////////////////////////////////////DAMAGE SELECTION
-
-//set selected dropdown as state
-const handleDamageSelection = (event) => {
-  setDamageSelection(event.target.value);
-};
+//////////////////////////////////////////////////////////////////////////////////////DAMAGES
 
 
+const optionDamages = ()=>{
+  if(stateSelection !== ''){
+    return(
+      <div>
+       
+       <Typography className="domain" gutterBottom>
+          Day of creation: ## / ## / ####
+        </Typography>
+        <Typography className="domain" gutterBottom>
+          Occuring damages: #
+        </Typography>
 
-//////////////////////////////////////////////////////////////////////////////////////QUERY OBJECT URI
-const [objectURI, setObjectURI] = React.useState('');
+       
+       
+       
+       
+       
+       
+       
+       
+        <Typography className='interTitleBox' gutterBottom>
+            <div className='interTitle' > Occuring damages</div>
+        </Typography>
 
 
-const queryObjectURI = `PREFIX props: <https://w3id.org/props#>
-PREFIX bot: <https://w3id.org/bot#>
-PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
-PREFIX schema: <http://schema.org/>
-SELECT ?obj
-WHERE {
-    ?obj props:globalIdIfcRoot/schema:value "${objectGuid}" .
-}`
+        <Typography  className='domain'>
+            <input type="checkbox" id="damage1" className="checkBox"></input>
+            <label for="damage1" className="checkBox" >damage1</label> 
+        </Typography>
+        <Typography className='domain'>
+            <input type="checkbox" id="damage2" className="checkBox"></input>
+            <label for="damage2" className="checkBox" >damage2</label> 
+        </Typography>
+        <Typography className='domain'>
+            <input type="checkbox" id="damage3" className="checkBox"></input>
+            <label for="damage3" className="checkBox" >damage3</label> 
+        </Typography>
+        <Typography className='domain'>
+            <input type="checkbox" id="damage4" className="checkBox"></input>
+            <label for="damage4" className="checkBox" >damage4</label> 
+        </Typography>
 
-async function executeQueryObjectURI (query) {
-  try {
-    let token
-    if (context.user && context.user.token) {
-      token = context.user.token
+
+
+      </div>
+    )
+  } else{
+      return
     }
-      const results = await queryMultiple(context.currentProject.id, query, context.currentProject.activeGraphs, token)
-      setObjectURI(results.results.bindings[0].obj.value)
-      //object URI as objURI.results.bindings[0].obj.value
-  } catch (error) {
-      console.log('error', error)
-  }
 }
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////SUBMIT
-
-
-const handleSubmit = () => {
-
-  if(damageSelection !== ''){
-    setOpen(false);
-  }
-  //execute query functions
-
-
-};
-
 
 
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
@@ -177,76 +169,62 @@ const handleSubmit = () => {
     <div>
 
       <Button variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={handleClickOpen}
-                  >Delete</Button>
-
-
+        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
+        onClick={handleClickOpen}
+      >Overview</Button>
 
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Delete damage
+          Damage overview for selected object
         </DialogTitle>
         <DialogContent dividers style={{width: "600px"}}>
-          
 
-          <Typography style={{paddingBottom: "15px"}} gutterBottom>
-            Object GUID: {objectGuid}
+
+        <Typography className='interTitleBox' gutterBottom>
+            <div className='interTitle' > Damage history</div>
           </Typography>
 
-
-
-          <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI()}>
+        <div className="dropdown" style={{paddingTop: '25px'}}>
+          <FormControl variant="outlined" className="dropdownComponent">
             <Select
               native
               value={stateSelection}
               onChange={handleStateSelection}
             >
-              <option value="Damage state 2">Damage state 2</option>
-              <option value="Damage state 1">Damage state 1</option>
-
-            </Select>
-          </FormControl>
-          </div>
-
-
-          <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI()}>
-            <Select
-              native
-              value={damageSelection}
-              onChange={handleDamageSelection}
-            >
-              <option value="">No damage selected</option>
-              <option value="Damage_Area_1">Damage_Area_1</option>
-              <option value="Damage_Area_2">Damage_Area_2</option>
-              <option value="Damage_Element1">Damage_Element1</option>
+              <option value="">No state selected</option>
+              <option value="Damage state 1">Damage state 1 - 06/02/2020 - 1 damage(s)</option>
+              <option value="Damage state 2">Damage state 2 - 24/08/2020 - 5 damage(s)</option>
+              <option value="Damage state 3">Damage state 3 - 15/10/2020 - 2 damage(s)</option>
             </Select>
           </FormControl>
         </div>
+          
+
+
+
+        <Typography gutterBottom>
+          {optionDamages()}
+        </Typography>
+
 
 
         </DialogContent>
         <DialogActions>
         <Button autoFocus onClick={handleClose} size="small" color="primary">
-            Cancel
-          </Button>
-          <Button autoFocus onClick={handleSubmit} variant="contained" size="small" color="primary">
-          Delete Damage Permanently
-          </Button>
+          Cancel
+        </Button>
+        <Button autoFocus onClick={handleClose} variant="contained" size="small" color="primary">
+          exit
+        </Button>
         </DialogActions>
       </Dialog>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
       <div>
       <Dialog
         open={openAlert}
@@ -266,22 +244,11 @@ const handleSubmit = () => {
         </DialogActions>
       </Dialog>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
     </div>
   );
 }
-

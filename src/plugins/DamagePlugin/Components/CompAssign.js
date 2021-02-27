@@ -101,7 +101,7 @@ export default function CustomizedDialogs() {
   const [checkClassification, setCheckClassification] = React.useState(false);
   const [checkProperties, setCheckProperties] = React.useState(false);
   const [checkTask, setCheckTask] = React.useState(false);
-  const [checkDocuments, setCheckDocuments] = React.useState(false);
+  // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   
 
@@ -121,7 +121,7 @@ export default function CustomizedDialogs() {
       setCheckClassification('')
       setCheckProperties('');
       setCheckTask('');
-      setCheckDocuments('');
+      // setCheckDocuments('');
       setCheckComment('');
       setClassificationOptions([]);
       
@@ -479,31 +479,31 @@ const optionTask = ()=>{
 }
 
  //////////////////////////////////////////////////////////////////////////////////////DOCUMENTS
-//check Documents
-const toggleDocuments = () => {
-  if(document.getElementById("checkDocuments").checked===true){
-    setCheckDocuments(true)
-   }else{
-     setCheckDocuments(false)
-   }
-};
+// //check Documents
+// const toggleDocuments = () => {
+//   if(document.getElementById("checkDocuments").checked===true){
+//     setCheckDocuments(true)
+//    }else{
+//      setCheckDocuments(false)
+//    }
+// };
 
-//display Documents
-const optionDocuments = ()=>{
-  if(checkDocuments === true){
-    return(
+// //display Documents
+// const optionDocuments = ()=>{
+//   if(checkDocuments === true){
+//     return(
       
-      <Typography className="domain" gutterBottom>
-        [under construction]
-      </Typography>
+//       <Typography className="domain" gutterBottom>
+//         [under construction]
+//       </Typography>
 
-    )
-  } else{
-      return(
-        <p></p>
-      )
-    }
-}
+//     )
+//   } else{
+//       return(
+//         <p></p>
+//       )
+//     }
+// }
 
  //////////////////////////////////////////////////////////////////////////////////////COMMENT
  //check Comment
@@ -694,7 +694,7 @@ const handleSubmit = () => {
           </Typography>
 
 
-
+{/* 
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > External documents</div>
           </Typography>
@@ -704,7 +704,7 @@ const handleSubmit = () => {
           </Typography>
           <Typography gutterBottom>
             {optionDocuments()}
-          </Typography>
+          </Typography> */}
 
 
 

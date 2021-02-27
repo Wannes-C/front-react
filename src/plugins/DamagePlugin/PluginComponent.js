@@ -6,12 +6,14 @@ import AppContext from "@context";
 import {miniDrawerWidth} from '@styles'
 import './styles.css'
 
+// import QueryChangeTabs from '../ProjectPlugin/QueryChangeTabs'
 
 // import components
 import CompAssign from './Components/CompAssign'
 import CompSearch from './Components/CompSearch'
 import CompUpdate from './Components/CompUpdate'
 import CompEdit from './Components/CompEdit'
+import CompOverview from './Components/CompOverview'
 //import test
 import Comptest from "./Components/test";
 
@@ -86,22 +88,23 @@ export default function MyPlugin() {
               </Typography>
 
               <Typography>
-                Damages occuring to object:
+                Damages occuring to selected objects:
                 <> no damage found</>
               </Typography>
 
   {/* buttons */}         
 
               <CompAssign></CompAssign>
-              <CompSearch></CompSearch>
-                  {/* e.g. display overview of damage history, search on damage name to select its object,... */}
               <CompUpdate></CompUpdate>
               <CompEdit></CompEdit>
+              <CompSearch></CompSearch>
+              <CompOverview></CompOverview>
+
 
           {/* test */}
-              <Comptest/>
+              {/* <Comptest/> */}
             
-
+              {/* <QueryChangeTabs /> */}
 
             </div>
           </Drawer>{" "}
