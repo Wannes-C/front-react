@@ -1,177 +1,110 @@
-import React, { useContext, useState } from 'react';
-import AppContext from "@context";
+import React from 'react';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
+import Chip from '@material-ui/core/Chip';
 
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import '../styles.css'
-
-
-
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    maxWidth: 300,
   },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
-});
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other} 
-                    style={{background: '	#e92063', color:'white'}}>
-      <Typography variant="h6" >{children}</Typography>
-      {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose} style={{color:'white'}}>
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
+  chip: {
+    margin: 2,
   },
-}))(MuiDialogContent);
-
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
+  noLabel: {
+    marginTop: theme.spacing(3),
   },
-}))(MuiDialogActions);
+}));
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
 
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 
+export default function MultipleSelect() {
+  const classes = useStyles();
 
-export default function CustomizedDialogs() {
-  ///////////////////////////////////////////////////////////////////////////////////////////STATES
-  ////const[state-element, function to change state] = React.useState(defailt value)
-  const [open, setOpen] = React.useState(false);
-  const { context, setContext } = useContext(AppContext);
-  const [objectGuid, setObjectGuid] = React.useState('');
-  const [damageAmount, setdamageAmount] = React.useState(0);
+  const [personName, setPersonName] = React.useState([]);
 
-
-
-
-  ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
-  //open and close functions for pop-up
-  const handleClickOpen = () => {
-    if (context.selection[0] !== undefined) {
-      //if object selected
-      setOpen(true);
-      setObjectGuid(context.selection[0].guid);
-
-
-    } else{
-      //if no object selected
-      setOpen(true);
-    }
+  const handleChange = (event) => {
+    setPersonName(event.target.value);
   };
 
-
-
-
-
-  const handleClose = () => {
-    setOpen(false);
-    setObjectGuid('');
-  };
-
-  ////////////////////////////////////////////////////////////////////////////////////////SEARCH WITHIN SELECTION
-
-  const optionSelection = ()=>{
-    if(objectGuid === ''){
-      return
-    } else{
-        return(
-          <div>
-
-            <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' > Search within one selected object</div>
-            </Typography>
-
-            <Typography className="domain" gutterBottom>
-            {damageAmount} currently occuring damage(s)
-            </Typography>
-
-            <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-
-
-          </div>
-        )
+  const handleChangeMultiple = (event) => {
+    const { options } = event.target;
+    const value = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
       }
     }
+    setPersonName(value);
+  };
 
-
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
   return (
     <div>
 
-      <Button variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={handleClickOpen}
-                  >Test</Button>
-
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Search damage
-        </DialogTitle>
-        <DialogContent dividers>
-          
-
-
-          <Typography gutterBottom>
-          {optionSelection()}
-          </Typography>
-
-
-          <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' > Search among all object</div>
-          </Typography>
-          
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-
-
-
-
-
-
-
-
-        </DialogContent>
-        <DialogActions>
-        <Button autoFocus onClick={handleClose} size="small" color="primary">
-            Cancel
-          </Button>
-          <Button autoFocus onClick={handleClose} variant="contained" size="small" color="primary">
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
+        <Select
+          labelId="demo-mutiple-checkbox-label"
+          id="demo-mutiple-checkbox"
+          multiple
+          value={personName}
+          onChange={handleChange}
+          input={<Input />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={personName.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    
     </div>
   );
 }

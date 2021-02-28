@@ -90,7 +90,7 @@ export default function CustomizedDialogs() {
   const [classificationOptions, setClassificationOptions] = React.useState([]);
   const [classification, setClassification] = React.useState([]);
 
-  const [checkProperties, setCheckProperties] = React.useState(false);
+  // const [checkProperties, setCheckProperties] = React.useState(false);
 
   const [checkTask, setCheckTask] = React.useState(false);
 
@@ -113,7 +113,7 @@ export default function CustomizedDialogs() {
     setCheckClassification(false)
     setClassificationOptions([])
     setClassification([])
-    setCheckProperties(false)
+    // setCheckProperties(false)
     setCheckTask(false)
     setCheckObjectGuid(false)
     setObjectGuid('')
@@ -139,7 +139,7 @@ export default function CustomizedDialogs() {
         setCheckClassification(false)
         setClassificationOptions([])
         setClassification([])
-        setCheckProperties(false)
+        // setCheckProperties(false)
         setCheckTask(false)
         setCheckObjectGuid(false)
         setObjectGuid('')
@@ -189,13 +189,13 @@ export default function CustomizedDialogs() {
               {optionClassification()}
             </Typography>
 
-            <Typography className="searchOptions">
+            {/* <Typography className="searchOptions">
               <input type="checkbox" id="checkProperties"  onClick={()=>toggleProperties()}></input>
               <label for="checkProperties" > Properties</label> 
             </Typography>
             <Typography gutterBottom>
               {optionProperties()}
-            </Typography>
+            </Typography> */}
 
             <Typography className="searchOptions">
               <input type="checkbox" id="checkTask"  onClick={()=>toggleTask()}></input>
@@ -472,32 +472,32 @@ export default function CustomizedDialogs() {
 
     ////////////////////////////////////////////////////////////////////////////////////////PROPERTIES
 
-    //toggle use of Properties-filter
-    const toggleProperties = () => {
-      if(document.getElementById("checkProperties").checked===true){
-        setCheckProperties(true)
+    // //toggle use of Properties-filter
+    // const toggleProperties = () => {
+    //   if(document.getElementById("checkProperties").checked===true){
+    //     setCheckProperties(true)
 
-       }else{
-         setCheckProperties(false)
-       }
-    };
+    //    }else{
+    //      setCheckProperties(false)
+    //    }
+    // };
 
 
 
-    //return input
-    const optionProperties = ()=>{
-      if(checkProperties === false){
-        return
-      }
+    // //return input
+    // const optionProperties = ()=>{
+    //   if(checkProperties === false){
+    //     return
+    //   }
 
-      if(checkProperties === true){
-        return(
-          <Typography className ="searchOptionElab" gutterBottom>
-              [Under construction]
-        </Typography>
-        )
-      }
-    }
+    //   if(checkProperties === true){
+    //     return(
+    //       <Typography className ="searchOptionElab" gutterBottom>
+    //           [Under construction]
+    //     </Typography>
+    //     )
+    //   }
+    // }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////TASKS

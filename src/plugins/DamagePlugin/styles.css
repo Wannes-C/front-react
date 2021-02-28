@@ -100,3 +100,15 @@
     padding-left: 45px;
     padding-top: 15px;
   }
+
+  .taskOption{
+    padding-left: 30px;
+  }
+
+  .ontologyTaskOptions{
+    padding-left: 55px;
+  }
+  .ontologyTaskOptionsDropdown{
+    padding-left: 55px;
+    padding-bottom: 20px;
+  }

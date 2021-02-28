@@ -17,6 +17,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import FormGroup from '@material-ui/core/FormGroup';
+import MenuItem from "@material-ui/core/MenuItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Checkbox from "@material-ui/core/Checkbox";
 import '../styles.css'
 
 import {queryMultiple} from 'lbd-server'
@@ -29,6 +32,11 @@ import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
 import CDOclasses from './ClassesOntologies/ConcreteCDO'
 // import IMPORT_MY_ONTOLOGY_ARRAY from './ClassesOntologies/MY_ONTOLOGY'
     // add at optionClassification() (1x) and defineClassificationOptions() (2x)
+
+import FungiMWV from './TasksOntologies/FungiMWV'
+import InsectMWV from './TasksOntologies/InsectMWV'
+import PreventionMWV from './TasksOntologies/PreventionMWV'
+import TimberMWV from './TasksOntologies/TimberMWV'
 
 
 const styles = (theme) => ({
@@ -97,13 +105,16 @@ export default function CustomizedDialogs() {
   const [date, setDate] = React.useState('');
   const [objectGuid, setObjectGuid] = React.useState('');
 
-
-
+  const [orderTask, setOrderTask] = React.useState(false);
+  const [ontologyTask, setOntologyTask] = React.useState([]);
+  const [ontologyTaskOptions, setOntologyTaskOptions] = React.useState([]);
+  const [checkOntologyTask, setCheckOntologyTask] = React.useState(false);
+  const [checkCommentTask, setCheckCommentTask] = React.useState(false);
+  const [commentTask, setCommentTask] = React.useState('');
 
   const [checkClassification, setCheckClassification] = React.useState(false);
-  const [checkProperties, setCheckProperties] = React.useState(false);
-  const [checkTask, setCheckTask] = React.useState(false);
   const [checkNewState, setCheckNewState] = React.useState(false);
+  // const [checkProperties, setCheckProperties] = React.useState(false);
   // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   
@@ -121,8 +132,14 @@ export default function CustomizedDialogs() {
       setLabel('');
       setDate('');
       setCheckClassification('')
-      setCheckProperties('');
-      setCheckTask('');
+      setOrderTask('');
+      setCheckOntologyTask(false)
+      setCheckCommentTask(false)
+      setCommentTask('')
+      setCheckOntologyTask('')
+      setOntologyTaskOptions([])
+      setOntologyTask([])
+      // setCheckProperties('');
       // setCheckDocuments('');
       setCheckComment('');
       setDamageSelection('');
@@ -189,14 +206,14 @@ async function executeQueryObjectURI (query) {
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
   //set Radio and state after type selection
-  const setRadio = (damageType) => {
-    document.getElementById(damageType).checked = true
-      setType(damageType)
+  // const setRadio = (damageType) => {
+  //   document.getElementById(damageType).checked = true
+  //     setType(damageType)
 
-            // starts defining object URI
-            executeQueryObjectURI (queryObjectURI);
+  //           // starts defining object URI
+  //           executeQueryObjectURI (queryObjectURI);
  
-  };
+  // };
 
   const handleSwitchChange = (event) => {
     setDefectStructuralSwitch({ ...defectStructuralSwitch, [event.target.name]: event.target.checked });
@@ -352,58 +369,234 @@ const handleClassificationChange = (event) => {
 
 
  //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-//check Properties
- const toggleProperties = () => {
-  if(document.getElementById("checkProperties").checked===true){
-    setCheckProperties(true)
-   }else{
-     setCheckProperties(false)
-   }
-};
+// //check Properties
+//  const toggleProperties = () => {
+//   if(document.getElementById("checkProperties").checked===true){
+//     setCheckProperties(true)
+//    }else{
+//      setCheckProperties(false)
+//    }
+// };
 
-//display Properties
-const optionProperties = ()=>{
-  if(checkProperties === true){
-    return(
+// //display Properties
+// const optionProperties = ()=>{
+//   if(checkProperties === true){
+//     return(
       
-      <Typography className="domain" gutterBottom>
-        [under construction]
-      </Typography>
+//       <Typography className="domain" gutterBottom>
+//         [under construction]
+//       </Typography>
 
-    )
-  } else{
-      return(
-        <p></p>
-      )
-    }
-}
+//     )
+//   } else{
+//       return
+//     }
+// }
 
  //////////////////////////////////////////////////////////////////////////////////////TASK
 //check Task
 const toggleTask = () => {
   if(document.getElementById("checkTask").checked===true){
-    setCheckTask(true)
+    setOrderTask(true)
    }else{
-     setCheckTask(false)
+     setOrderTask(false)
+     setCheckOntologyTask(false)
+     setCheckCommentTask(false)
+     setCommentTask('')
    }
 };
 
 //display Task
 const optionTask = ()=>{
-  if(checkTask === true){
+  if(orderTask === true){
     return(
-      
-      <Typography className="domain" gutterBottom>
-        [under construction]
-      </Typography>
+      <div>
+        <Typography className="taskOption">
+          <input type="checkbox" id="checkOntologyTask"  onClick={()=>toggleOntologyTask()}></input>
+          <label for="checkOntologyTask" className="checkBox" >Elaborate ontology-based task</label> 
+        </Typography>
+        <Typography gutterBottom>
+          {optionOntologyTask()}
+        </Typography>
 
+        <Typography className="taskOption">
+          <input type="checkbox" id="checkCommentTask"  onClick={()=>toggleCommentTask()}></input>
+          <label for="checkCommentTask" className="checkBox" >Elaborate with comment</label> 
+        </Typography>
+        <Typography gutterBottom>
+          {optionCommentTask()}
+        </Typography>
+      </div>
     )
   } else{
-      return(
-        <p></p>
-      )
+      return
     }
 }
+
+
+
+const toggleOntologyTask = () => {
+  if(document.getElementById("checkOntologyTask").checked===true){
+    setCheckOntologyTask(true)
+   }else{
+    setCheckOntologyTask(false)
+   }
+};
+
+const toggleCommentTask = () => {
+  if(document.getElementById("checkCommentTask").checked===true){
+    setCheckCommentTask(true)
+   }else{
+     setCheckCommentTask(false)
+     setCommentTask('')
+   }
+};
+
+
+
+
+
+//////////////////////////////////////////////////display Ontology Task
+const optionOntologyTask = ()=>{
+  if(checkOntologyTask === true){
+    return(
+      <div>
+
+      <Typography className="ontologyTaskOptions">
+         Select ontologies for obtaining classification options
+       </Typography>
+       <Typography className="ontologyTaskOptions">
+         <input type="checkbox" id="toggleTimberMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+         <label for="toggleTimberMVWT" className="checkBoxClose" >Degraded timber repair (MVW-T)</label> 
+       </Typography>
+       <Typography className="ontologyTaskOptions">
+         <input type="checkbox" id="toggleFungiMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+         <label for="toggleFungiMVWT" className="checkBoxClose" >Fungi control (MVW-T)</label> 
+       </Typography>
+       <Typography className="ontologyTaskOptions">
+         <input type="checkbox" id="toggleInsectMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+         <label for="toggleInsectMVWT" className="checkBox" >Insect control (MVW-T)</label> 
+       </Typography>
+       <Typography className="ontologyTaskOptionsDropdown">
+         <input type="checkbox" id="togglePreventionMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+         <label for="togglePreventionMVWT" className="checkBox" >Insects-and-fungi-prevention (MVW-T)</label> 
+       </Typography>
+       {/* <Typography className="domain">
+          <input type="checkbox" id="toggle_MY_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
+          <label for="toggle_MY_ONTOLOGY" className="checkBox"> MY ONTOLOGY NAME </label> 
+        </Typography> */}
+
+
+          <div className="ontologyTaskOptionsDropdown">    
+                <FormControl variant="outlined" className="dropdownComponent">
+
+                  <Select
+                    multiple
+                    value={ontologyTask}
+                    onChange={handleOntologyTaskChange}
+                     renderValue={(selected) => selected.join(", ")}
+                  >
+                  {ontologyTaskOptions.map((element) => (
+                    <MenuItem key={element} value={element}>
+                      <Checkbox checked={ontologyTask.indexOf(element) > -1} />
+                      <ListItemText primary={element} />
+                    </MenuItem>
+                  ))}
+                  </Select>
+                </FormControl>
+              </div>
+
+
+
+      </div>
+    )
+  } else{
+      return
+    }
+}
+
+
+        //define dropdown option
+
+        const defineTaskOptions = ()=>{
+          setOntologyTask([])
+      
+        if (document.getElementById("toggleTimberMVWT").checked===true) {
+          var OptionTimberMVWT = TimberMWV
+        } else {
+          OptionTimberMVWT = []
+        }
+        
+        
+        if (document.getElementById("toggleFungiMVWT").checked===true) {
+          var OptionFungiMVWT = FungiMWV
+        } else {
+          OptionFungiMVWT = []
+        }
+        
+        
+        if (document.getElementById("toggleInsectMVWT").checked===true) {
+          var OptionInsectMVWT = InsectMWV
+        } else {
+          OptionInsectMVWT = []
+        }
+        
+        
+        if (document.getElementById("togglePreventionMVWT").checked===true) {
+          var OptionPreventionMVWT = PreventionMWV
+        } else {
+          OptionPreventionMVWT = []
+        }
+        
+      
+        // if (document.getElementById("Option_MY ONTOLOGY").checked===true) {
+        //   var Option_MY_ONTOLOGY = IMPORT_MY_ONTOLOGY_ARRAY
+        // } else {
+        //   Option_MY_ONTOLOGY =[]
+        // }
+      
+        
+        setOntologyTaskOptions(OptionTimberMVWT.concat(OptionFungiMVWT).concat(OptionInsectMVWT).concat(OptionPreventionMVWT))
+        //Add '.concat(Option_MY_ONTOLOGY)
+       }
+
+
+        //set selected dropdown as state
+    const handleOntologyTaskChange = (event) => {
+      setOntologyTask(event.target.value);
+    };
+
+
+//////////////////////////////////////////////////////display Comment Task
+const optionCommentTask = ()=>{
+  if(checkCommentTask === true){
+    return(
+      <div>
+        <Typography className="taskOption" gutterBottom>
+          <form  noValidate autoComplete="off">
+          <TextField
+            className="descriptionForm"
+            id="description"
+            label="Task description"
+            multiline
+            rows={5}
+            variant="outlined"
+            value={commentTask}
+            onChange={handleCommentTaskChange}/>
+          </form>
+        </Typography>
+      </div>
+    )
+  } else{
+      return
+    }
+}
+
+//set input as state
+const handleCommentTaskChange = (event) => {
+  setCommentTask(event.target.value);
+};
+
 
  //////////////////////////////////////////////////////////////////////////////////////DOCUMENTS
 // //check Documents
@@ -563,7 +756,7 @@ const optionUpdate = ()=>{
             <div className='interTitle' >Damage type</div>
           </Typography>
           
-          <Typography className ="domain" gutterBottom>
+          {/* <Typography className ="domain" gutterBottom>
             <form>
               <div className="radio">
                 <input id="Damage" type="radio" name="optradio" onClick={()=> {setRadio("Damage")}}></input>
@@ -578,7 +771,7 @@ const optionUpdate = ()=>{
                 <label for="DamageElement"> Damage element </label>
               </div>
              </form>
-          </Typography>
+          </Typography> */}
 
 
           <div>
@@ -623,7 +816,7 @@ const optionUpdate = ()=>{
 
 
 
-          <Typography className='interTitleBox' gutterBottom>
+          {/* <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > Properties</div>
           </Typography>
           <Typography>
@@ -632,7 +825,7 @@ const optionUpdate = ()=>{
           </Typography>
           <Typography gutterBottom>
             {optionProperties()}
-          </Typography>
+          </Typography> */}
 
 
 
@@ -642,7 +835,7 @@ const optionUpdate = ()=>{
           </Typography>
           <Typography>
             <input type="checkbox" id="checkTask" className="checkBox" onClick={()=>toggleTask()}></input>
-            <label for="checkTask" className="checkBox" >Assign task for damage removal</label> 
+            <label for="checkTask" className="checkBox" >Assign task for damage repair</label> 
           </Typography>
           <Typography gutterBottom>
             {optionTask()}
