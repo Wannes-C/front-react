@@ -74,8 +74,21 @@ export default function MyPlugin() {
               <div  className="pluginTitle" style={{paddingBottom: "12px", paddingTop: "12px"}}>
                 <Typography color="secondary" style={{marginLeft: "35%", marginRight: "65%"}} > DAMAGE PLUGIN </Typography>
               </div>
-              
-              <Typography style={{paddingTop: "20px"}}>
+
+  {/* buttons */}         
+
+              <CompAssign></CompAssign>
+              <CompUpdate></CompUpdate>
+              <CompEdit></CompEdit>
+              <CompSearch></CompSearch>
+              <CompOverview></CompOverview>
+              {/* <Comptest/> */}
+
+              <div className='interTitleBox'></div>
+
+
+
+              <Typography style={{paddingTop: "1px"}}>
                 Current object selection:
                 {(context.selection.length > 0) ? (
                   context.selection.map(item => {
@@ -91,18 +104,6 @@ export default function MyPlugin() {
                 Damages occuring to selected objects:
                 <> no damage found</>
               </Typography>
-
-  {/* buttons */}         
-
-              <CompAssign></CompAssign>
-              <CompUpdate></CompUpdate>
-              <CompEdit></CompEdit>
-              <CompSearch></CompSearch>
-              <CompOverview></CompOverview>
-
-
-          {/* test */}
-              {/* <Comptest/> */}
             
               {/* <QueryChangeTabs /> */}
 

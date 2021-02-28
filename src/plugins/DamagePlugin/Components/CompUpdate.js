@@ -27,6 +27,8 @@ import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
 import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
 import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
 import CDOclasses from './ClassesOntologies/ConcreteCDO'
+// import IMPORT_MY_ONTOLOGY_ARRAY from './ClassesOntologies/MY_ONTOLOGY'
+    // add at optionClassification() (1x) and defineClassificationOptions() (2x)
 
 
 const styles = (theme) => ({
@@ -98,10 +100,10 @@ export default function CustomizedDialogs() {
 
 
 
-  const [checkTopology, setCheckTopology] = React.useState(false);
   const [checkClassification, setCheckClassification] = React.useState(false);
   const [checkProperties, setCheckProperties] = React.useState(false);
   const [checkTask, setCheckTask] = React.useState(false);
+  const [checkNewState, setCheckNewState] = React.useState(false);
   // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   
@@ -118,7 +120,6 @@ export default function CustomizedDialogs() {
       setComment('');
       setLabel('');
       setDate('');
-      setCheckTopology('');
       setCheckClassification('')
       setCheckProperties('');
       setCheckTask('');
@@ -210,105 +211,6 @@ async function executeQueryObjectURI (query) {
 
 
 
-  //////////////////////////////////////////////////////////////////////////////////////TOPOLOGY
-    //enable ontology (based on damage option)
-    const enableTopology = ()=>{
-      if(type === 'Damage'){
-        return
-      }
-  
-
-      if(type === 'DamageArea'){
-        return(
-          <div>
-            <Typography className='interTitleBox' gutterBottom>
-              <div className='interTitle' >Damage topology</div>
-            </Typography>
-            <Typography>
-              <input type="checkbox" id="checkTopology" className="checkBox" onClick={()=>toggleTopology()}></input>
-              <label for="checkTopology" className="checkBox" >Specify damage topology</label> 
-            </Typography>
-            <Typography gutterBottom>
-              {optionTopologyArea()}
-            </Typography>
-          </div>
-        )
-      }
-  
-
-      if(type === 'DamageElement'){
-        return(
-          <div>
-            <Typography className='interTitleBox' gutterBottom>
-              <div className='interTitle' >Damage topology</div>
-            </Typography>
-            <Typography>
-              <input type="checkbox" id="checkTopology" className="checkBox" onClick={()=>toggleTopology()}></input>
-              <label for="checkTopology" className="checkBox" >Further specify damage topology</label> 
-            </Typography>
-            <Typography gutterBottom>
-              {optionTopologyElement()}
-            </Typography>
-          </div>
-        )
-      }
-   }
-  
-  
-  
-  
-  
-  
-  //check Topology (based on check)
- const toggleTopology = () => {
-  if(document.getElementById("checkTopology").checked===true){
-    setCheckTopology(true)
-   }else{
-     setCheckTopology(false)
-   }
-};
-
-
-
-//display Topology (based on check) for damage AREA
-const optionTopologyArea = ()=>{
-  if(checkTopology === true){
-    return(
-      
-      <Typography gutterBottom>
-      <p>assign damage elements</p>
-      <p>assign damage pattern</p>
-    </Typography>
-    )
-  } else{
-      return(
-        <p></p>
-      )
-    }
-}
-
-
-//display Topology (based on check) for damage ELEMENT
-const optionTopologyElement = ()=>{
-  if(checkTopology === true){
-    return(
-      
-      <Typography gutterBottom> 
-         <p>assign adjacent element</p>
-         <p>assign to damage pattern</p>
-    </Typography>
-    )
-  } else{
-      return(
-        <p></p>
-      )
-    }
-}
-  
-  
-  
-
-
 
  //////////////////////////////////////////////////////////////////////////////////////CLASSIFICATION
 //check Classification
@@ -352,6 +254,10 @@ const optionClassification = ()=>{
          <input type="checkbox" id="toggleMWVDTextile" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
          <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
        </Typography>
+       {/* <Typography className="domain">
+          <input type="checkbox" id="toggle_MY_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
+          <label for="toggle_MY_ONTOLOGY" className="checkBox"> MY ONTOLOGY NAME </label> 
+        </Typography> */}
 
 
        <Typography className="domain">
@@ -419,8 +325,16 @@ const defineClassificationOptions = ()=>{
  } else {
    var OptionMWVDTextile =[]
  }
+
+  // if (document.getElementById("Option_MY ONTOLOGY").checked===true) {
+  //   var Option_MY_ONTOLOGY = IMPORT_MY_ONTOLOGY_ARRAY
+  // } else {
+  //   Option_MY_ONTOLOGY =[]
+  // }
+
  
  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
+  //Add '.concat(Option_MY_ONTOLOGY)
 }
 
 
@@ -572,6 +486,44 @@ const handleLabelChange = (event) => {
 };
 
 
+
+
+
+const toggleNewState = () => {
+  if(document.getElementById("checkNewState").checked===true){
+    setCheckNewState(true)
+   }else{
+     setCheckNewState(false)
+     setDate('')
+   }
+};
+
+const labelAndDate = ()=>{
+  if (checkNewState===false) {
+    return(
+    <Typography gutterBottom>
+    <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
+                value={label}
+                onChange={handleLabelChange}/>
+  
+    </Typography>)
+    
+  } else {
+    return(
+    <Typography gutterBottom>
+      <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
+                value={label}
+                onChange={handleLabelChange}/>
+      <TextField className="dateForm" id="date" variant="outlined" 
+         type="date"     
+          value={date}
+         onChange={handleDateChange}/>
+    </Typography>)
+  }
+
+}
+
+
 const handleDateChange = (event) => {
   setDate(event.target.value)
 };
@@ -655,11 +607,6 @@ const optionUpdate = ()=>{
             </FormGroup>
           </div>
 
-
-          <Typography gutterBottom>
-            {enableTopology()}
-          </Typography>
-
  
 
 
@@ -733,20 +680,10 @@ const optionUpdate = ()=>{
             <div className='interTitle' > Additional information</div>
           </Typography>
 
-          <Typography gutterBottom>
-            <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
-                        value={label}
-                        onChange={handleLabelChange}/>
-           
-            <TextField className="dateForm" id="date" variant="outlined" 
-                        type="date"     
-                        value={date}
-                        onChange={handleDateChange}
-                        />
-          </Typography>
+          {labelAndDate()}
 
           <Typography>
-            <input type="checkbox" id="checkNewState" className="checkBox"></input>
+            <input type="checkbox" id="checkNewState" className="checkBox" onClick={()=>toggleNewState()}></input>
             <label for="checkNewState" className="checkBox" >Assign new damage state to object</label> 
           </Typography>
 
