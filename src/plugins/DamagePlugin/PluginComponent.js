@@ -82,7 +82,7 @@ export default function MyPlugin() {
               <CompEdit></CompEdit>
               <CompSearch></CompSearch>
               <CompOverview></CompOverview>
-              {/* <Comptest/> */}
+              <Comptest/>
 
               <div className='interTitleBox'></div>
 
