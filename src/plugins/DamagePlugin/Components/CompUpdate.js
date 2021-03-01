@@ -91,15 +91,13 @@ export default function CustomizedDialogs() {
   const [openAlert, setOpenAlert] = React.useState(false);
   const { context, setContext } = useContext(AppContext);
 
+  const [options, setOptions] = React.useState('');
   const [damageSelection, setDamageSelection] = React.useState('');
   const [type, setType] = React.useState('');
   const [defectStructuralSwitch, setDefectStructuralSwitch] = React.useState({checkedA: false});
   const [defectStructural, setDefectStructural] = React.useState('Defect');
   const [classification, setClassification] = React.useState('');
   const [classificationOptions, setClassificationOptions] = React.useState([]);
-  // const [properties, setProperties] = React.useState('');
-  // const [Task, setTask] = React.useState('');
-  // const [Documents, setDocuments] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
   const [date, setDate] = React.useState('');
@@ -124,7 +122,8 @@ export default function CustomizedDialogs() {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
-
+      
+      setOptions('')
       setType('');
       setDefectStructuralSwitch({checkedA: false})
       setDefectStructural('Defect');
@@ -144,6 +143,7 @@ export default function CustomizedDialogs() {
       setCheckComment('');
       setDamageSelection('');
       setClassificationOptions([])
+      
 
     } else{
       setOpenAlert(true);
@@ -413,7 +413,7 @@ const optionTask = ()=>{
       <div>
         <Typography className="taskOption">
           <input type="checkbox" id="checkOntologyTask"  onClick={()=>toggleOntologyTask()}></input>
-          <label for="checkOntologyTask" className="checkBox" >Elaborate ontology-based task</label> 
+          <label for="checkOntologyTask" className="checkBox" >Elaborate with ontology-based task</label> 
         </Typography>
         <Typography gutterBottom>
           {optionOntologyTask()}
@@ -736,20 +736,68 @@ const handleSubmit = () => {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DISPLAY IF DAMAGE SELECTED
 
-const optionUpdate = ()=>{
-  if(damageSelection === ''){
+
+const optionResolveUpdate = ()=>{
+  if (damageSelection === '') {
+    return    
+  } else {
     return(
-      <p></p>
+      <div>
+          <Typography className ="domain" gutterBottom>
+            <form>
+              <div className="radio">
+                <input id="optionResolve" type="radio" name="optradio" onClick={()=> {setRadioOptions("optionResolve")}}></input>
+                  <label for="optionResolve"> Resolve damage</label>
+              </div>
+              <div className="radio">
+                <input id="optionUpdate" type="radio" name="optradio" onClick={()=> {setRadioOptions("optionUpdate")}}></input>
+                  <label for="optionUpdate"> Update Damage </label>
+              </div>
+             </form>
+          </Typography>
+        <Typography gutterBottom>
+          {optionUpdate()}
+        </Typography>
+      </div>
     )
-  } else{
+
+  }
+}
+
+
+
+const setRadioOptions = (element) => {
+  document.getElementById(element).checked = true
+    setOptions(element)
+
+};
+
+
+
+
+const optionUpdate = ()=>{
+  if(options === 'optionResolve'){
+    return(
+      <div>
+          <Typography className='interTitleBox' gutterBottom>
+            <div className='interTitle' >Resolve damage</div>
+          </Typography>
+
+          <Typography gutterBottom>
+            <TextField className="dateForm" id="date" variant="outlined" 
+              type="date"     
+              value={date}
+              onChange={handleDateChange}/>
+          </Typography>
+
+      </div>
+    )
+  } 
+
+
+  if(options === "optionUpdate"){
       return(
         <div>
-
-          <div className="delete">
-            <Button autoFocus variant="contained" size="small" color="primary" onClick={()=>deleteDamage()}>
-              Resolve damage
-            </Button>
-          </div>
 
 
           <Typography className='interTitleBox' gutterBottom>
@@ -929,7 +977,7 @@ const optionUpdate = ()=>{
 
 
         <Typography gutterBottom>
-          {optionUpdate()}
+          {optionResolveUpdate()}
         </Typography>
 
 

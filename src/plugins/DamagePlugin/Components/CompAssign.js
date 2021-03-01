@@ -96,18 +96,10 @@ export default function CustomizedDialogs() {
   const [defectStructural, setDefectStructural] = React.useState('Defect');
   const [classification, setClassification] = React.useState('');
   const [classificationOptions, setClassificationOptions] = React.useState([]);
-
-  
-  // const [Documents, setDocuments] = React.useState('');
   const [comment, setComment] = React.useState('');
   const [label, setLabel] = React.useState('');
   const [date, setDate] = React.useState('');
   const [objectGuid, setObjectGuid] = React.useState('');
-
-
-
-
-
   const [checkClassification, setCheckClassification] = React.useState(false);
 
   const [orderTask, setOrderTask] = React.useState(false);
@@ -409,7 +401,7 @@ const optionTask = ()=>{
       <div>
         <Typography className="taskOption">
           <input type="checkbox" id="checkOntologyTask"  onClick={()=>toggleOntologyTask()}></input>
-          <label for="checkOntologyTask" className="checkBox" >Elaborate ontology-based task</label> 
+          <label for="checkOntologyTask" className="checkBox" >Elaborate with ontology-based task</label> 
         </Typography>
         <Typography gutterBottom>
           {optionOntologyTask()}
@@ -568,7 +560,7 @@ const optionCommentTask = ()=>{
   if(checkCommentTask === true){
     return(
       <div>
-        <Typography className="taskOption" gutterBottom>
+        <Typography className="ontologyTaskOptionsDropdown" gutterBottom>
           <form  noValidate autoComplete="off">
           <TextField
             className="descriptionForm"

@@ -197,7 +197,7 @@ const handleSubmit = () => {
 
 
           <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI()}>
+          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI(queryObjectURI)}>
             <Select
               native
               value={stateSelection}
@@ -212,7 +212,7 @@ const handleSubmit = () => {
 
 
           <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI()}>
+          <FormControl variant="outlined" className="dropdownComponent" onClick={()=>executeQueryObjectURI(queryObjectURI)}>
             <Select
               native
               value={damageSelection}
