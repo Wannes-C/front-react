@@ -30,13 +30,15 @@ import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
 import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
 import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
 import CDOclasses from './ClassesOntologies/ConcreteCDO'
-// import IMPORT_MY_ONTOLOGY_ARRAY from './ClassesOntologies/MY_ONTOLOGY'
-    // add at optionClassification() (1x) and defineClassificationOptions() (2x)
+// import CLASS_ONTOLOGY_IMPORT from './ClassesOntologies/CLASS_ONTOLOGY'
+    //->search for 'CLASS_ONTOLOGY'
 
 import FungiMWV from './TasksOntologies/FungiMWV'
 import InsectMWV from './TasksOntologies/InsectMWV'
 import PreventionMWV from './TasksOntologies/PreventionMWV'
 import TimberMWV from './TasksOntologies/TimberMWV'
+// import TASK_ONTOLOGY_IMPORT from './TasksOntologies/TASK_ONTOLOGY'
+    //->search for 'TASK_ONTOLOGY'
 
 
 const styles = (theme) => ({
@@ -259,8 +261,8 @@ const optionClassification = ()=>{
          <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
        </Typography>
        {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_MY_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-          <label for="toggle_MY_ONTOLOGY" className="checkBox"> MY ONTOLOGY NAME </label> 
+          <input type="checkbox" id="toggle_CLASS_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
+          <label for="toggle_CLASS_ONTOLOGY" className="checkBox"> CLASS_ONTOLOGY_NAME </label> 
         </Typography> */}
 
 
@@ -330,15 +332,15 @@ const defineClassificationOptions = ()=>{
    OptionMWVDTextile =[]
  }
 
-   // if (document.getElementById("Option_MY ONTOLOGY").checked===true) {
-  //   var Option_MY_ONTOLOGY = IMPORT_MY_ONTOLOGY_ARRAY
+   // if (document.getElementById("Option_CLASS_ONTOLOGY").checked===true) {
+  //   var Option_CLASS_ONTOLOGY = CLASS_ONTOLOGY_IMPORT
   // } else {
-  //   Option_MY_ONTOLOGY =[]
+  //   Option_CLASS_ONTOLOGY =[]
   // }
  
- setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
- //Add '.concat(Option_MY_ONTOLOGY)
-}
+  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
+  //Add '.concat(Option_CLASS_ONTOLOGY)
+ }
 
 
 //convert to dropdown
@@ -470,8 +472,8 @@ const optionOntologyTask = ()=>{
          <label for="togglePreventionMVWT" className="checkBox" >Insects-and-fungi-prevention (MVW-T)</label> 
        </Typography>
        {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_MY_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-          <label for="toggle_MY_ONTOLOGY" className="checkBox"> MY ONTOLOGY NAME </label> 
+          <input type="checkbox" id="toggle_TASK_ONTOLOGY" className="checkBox" onClick={()=>defineTaskOptions()}></input>
+          <label for="toggle_TASK_ONTOLOGY" className="checkBox"> TASK_ONTOLOGY_NAME </label> 
         </Typography> */}
 
 
@@ -537,15 +539,15 @@ const optionOntologyTask = ()=>{
         }
         
       
-        // if (document.getElementById("Option_MY ONTOLOGY").checked===true) {
-        //   var Option_MY_ONTOLOGY = IMPORT_MY_ONTOLOGY_ARRAY
+        // if (document.getElementById("Option_TASK_ONTOLOGY").checked===true) {
+        //   var Option_TASK_ONTOLOGY = TASK_ONTOLOGY_IMPORT
         // } else {
-        //   Option_MY_ONTOLOGY =[]
+        //   Option_TASK_ONTOLOGY =[]
         // }
       
         
         setOntologyTaskOptions(OptionTimberMVWT.concat(OptionFungiMVWT).concat(OptionInsectMVWT).concat(OptionPreventionMVWT))
-        //Add '.concat(Option_MY_ONTOLOGY)
+        //Add '.concat(Option_TASK_ONTOLOGY)
        }
 
 
@@ -660,14 +662,6 @@ const handleCommentChange = (event) => {
 
 //////////////////////////////////////////////////////////////////////////////////////LABEL AND DATE
 
-//set input as state
-const handleLabelChange = (event) => {
-  setLabel(event.target.value);
-};
-
-
-
-
 
 const toggleNewState = () => {
   if(document.getElementById("checkNewState").checked===true){
@@ -677,6 +671,7 @@ const toggleNewState = () => {
      setDate('')
    }
 };
+
 
 const labelAndDate = ()=>{
   if (checkNewState===false) {
@@ -702,6 +697,13 @@ const labelAndDate = ()=>{
   }
 
 }
+
+
+
+const handleLabelChange = (event) => {
+  const givenName = event.target.value
+  setLabel(givenName.replace(/\s/g, ''));
+};
 
 
 const handleDateChange = (event) => {

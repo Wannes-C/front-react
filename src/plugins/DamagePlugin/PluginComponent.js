@@ -15,7 +15,8 @@ import CompUpdate from './Components/CompUpdate'
 import CompEdit from './Components/CompEdit'
 import CompOverview from './Components/CompOverview'
 //import test
-import Comptest from "./Components/test";
+import Comptest from "./Components/testSPARQL";
+import Comptestingqueries from "./Components/testingqueries";
 
 
 
@@ -82,7 +83,9 @@ export default function MyPlugin() {
               <CompEdit></CompEdit>
               <CompSearch></CompSearch>
               <CompOverview></CompOverview>
+
               <Comptest/>
+              <Comptestingqueries/>
 
               <div className='interTitleBox'></div>
 

@@ -320,10 +320,10 @@ export default function CustomizedDialogs() {
 
 
        //set input as state
-    const handleLabelChange = (event) => {
-      setLabel(event.target.value);
-    };
-
+       const handleLabelChange = (event) => {
+        const givenName = event.target.value
+        setLabel(givenName.replace(/\s/g, ''));
+      };
 
       ////////////////////////////////////////////////////////////////////////////////////////CLASSIFICATION
 

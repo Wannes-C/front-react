@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AppContext from "@context";
 
 import { withStyles } from '@material-ui/core/styles';
@@ -22,7 +22,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Checkbox from "@material-ui/core/Checkbox";
 import '../styles.css'
 
-import {queryMultiple} from 'lbd-server'
+import {queryMultiple, queryGraphSelect, updateGraph, getGraph} from 'lbd-server'
 
 //import ontology-classes for classification
 import MWVDTimberclasses from './ClassesOntologies/TimberMWVD'
@@ -39,7 +39,6 @@ import PreventionMWV from './TasksOntologies/PreventionMWV'
 import TimberMWV from './TasksOntologies/TimberMWV'
 // import TASK_ONTOLOGY_IMPORT from './TasksOntologies/TASK_ONTOLOGY'
     //->search for 'TASK_ONTOLOGY'
-
 
 
 const styles = (theme) => ({
@@ -94,8 +93,6 @@ export default function CustomizedDialogs() {
   const [openAlert, setOpenAlert] = React.useState(false);
   const { context, setContext } = useContext(AppContext);
 
-  const [options, setOptions] = React.useState('');
-  const [damageSelection, setDamageSelection] = React.useState('');
   const [type, setType] = React.useState('');
   const [defectStructuralSwitch, setDefectStructuralSwitch] = React.useState({checkedA: false});
   const [defectStructural, setDefectStructural] = React.useState('Defect');
@@ -105,6 +102,7 @@ export default function CustomizedDialogs() {
   const [label, setLabel] = React.useState('');
   const [date, setDate] = React.useState('');
   const [objectGuid, setObjectGuid] = React.useState('');
+  const [checkClassification, setCheckClassification] = React.useState(false);
 
   const [orderTask, setOrderTask] = React.useState(false);
   const [ontologyTask, setOntologyTask] = React.useState([]);
@@ -113,11 +111,15 @@ export default function CustomizedDialogs() {
   const [checkCommentTask, setCheckCommentTask] = React.useState(false);
   const [commentTask, setCommentTask] = React.useState('');
 
-  const [checkClassification, setCheckClassification] = React.useState(false);
-  const [checkNewState, setCheckNewState] = React.useState(false);
   // const [checkProperties, setCheckProperties] = React.useState(false);
   // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
+  const [checkNewState, setCheckNewState] = React.useState(false);
+
+
+  //states for SPARQL
+const [sparqlClassification, setSparqlClassification] = React.useState('');
+const [sparqlComment, setSparqlComment] = React.useState('');
   
 
   ////////////////////////////////////////////////////////////////////////////////////////open and close functions for pop-up
@@ -125,15 +127,15 @@ export default function CustomizedDialogs() {
     if (context.selection[0] !== undefined) {
       setOpen(true);
       setObjectGuid(context.selection[0].guid);
-      
-      setOptions('')
-      setType('');
+
+      setType('Damage');
       setDefectStructuralSwitch({checkedA: false})
       setDefectStructural('Defect');
       setComment('');
       setLabel('');
       setDate('');
-      setCheckClassification('')
+      setCheckClassification(false)
+
       setOrderTask('');
       setCheckOntologyTask(false)
       setCheckCommentTask(false)
@@ -144,10 +146,12 @@ export default function CustomizedDialogs() {
       // setCheckProperties('');
       // setCheckDocuments('');
       setCheckComment('');
-      setDamageSelection('');
-      setClassificationOptions([])
-      
+      setClassificationOptions([]);
+      setCheckNewState(false)
 
+      setSparqlComment('')
+      setSparqlClassification('')
+      
     } else{
       setOpenAlert(true);
     }
@@ -167,20 +171,11 @@ export default function CustomizedDialogs() {
   //open/close alert
   const handleCloseAlert = () => {
     setOpenAlert(false);
-  };
+    };
 
-  //////////////////////////////////////////////////////////////////////////////////////DAMAGE SELECTION
 
-//set selected dropdown as state
-const handleDamageSelection = (event) => {
-  setDamageSelection(event.target.value);
-};
 
-const deleteDamage = ()=>{
-    handleClose()
-}
-
-//////////////////////////////////////////////////////////////////////////////////////QUERY OBJECT URI
+//////////////////////////////////////////////////////////////////////////////////////QUERY testin
 const [objectURI, setObjectURI] = React.useState('');
 
 
@@ -193,30 +188,70 @@ WHERE {
     ?obj props:globalIdIfcRoot/schema:value "${objectGuid}" .
 }`
 
-async function executeQueryObjectURI (query) {
-  try {
-    let token
-    if (context.user && context.user.token) {
-      token = context.user.token
-    }
-      const results = await queryMultiple(context.currentProject.id, query, context.currentProject.activeGraphs, token)
-      setObjectURI(results.results.bindings[0].obj.value)
-      //object URI as objURI.results.bindings[0].obj.value
-  } catch (error) {
-      console.log('error', error)
-  }
+
+
+//first query for: 
+
+  //('already existing damage-history')
+  //all damage names (for this object) -> ?name a dot:Damage. (objGUID dot:hadDamage ?name) -> unique name (query when opening pop-up?)
+  //object GUID if new state must be made
+  //check if already a state is existant is user doesn't check 'make new one'
+
+
+//Assign damage query:
+
+const assignDamageQuery =
+`PREFIX props: <https://w3id.org/props#>
+PREFIX bot: <https://w3id.org/bot#>
+PREFIX beo: <https://pi.pauwel.be/voc/buildingelement#>
+PREFIX schema: <http://schema.org/>
+PREFIX dot: <https://w3id.org/dot#>
+PREFIX mwv-d: <https://w3id.org/con-tax/damages/mwv#>
+PREFIX cdo: <https://wisib.de/ontologie/damage/cdo#>
+
+INSERT DATA {
+  {damageState} dot:hasDamage inst:${label}_${objectGuid} ;
+                dot:has${type} inst:${label}_${objectGuid} .
+
+  inst:${label}_${objectGuid} a dot:${type}, dot:${defectStructural} .
+  ${sparqlClassification}
+  ${sparqlComment}
+
+}`
+
+
+//add prefixes for added ontologies CLASS_ONTOLOGY and/or TASK_ONTOLOGY in SPARQL query
+
+
+
+//inst prefix?
+
+//enkel query uitvoeren indien bepaalde waarden (bv type, label(+unique!),..) zijn ingegeven !!!!!!!!!
+
+     
+
+
+
+
+
+
+const testing = ()=>{
+
+          console.log(assignDamageQuery)
+
 }
 
-  //////////////////////////////////////////////////////////////////////////////////////TYPE
-  //set Radio and state after type selection
-  // const setRadio = (damageType) => {
-  //   document.getElementById(damageType).checked = true
-  //     setType(damageType)
 
-  //           // starts defining object URI
-  //           executeQueryObjectURI (queryObjectURI);
- 
-  // };
+
+/////////////////////////////////////////////////////////////////////////////////////TYPE
+  //set Radio and state after type selection
+  const setRadio = (damageType) => {
+    document.getElementById(damageType).checked = true
+      setType(damageType)
+
+      // starts defining object URI
+      // executeQueryObjectURI (queryObjectURI);
+  };
 
   const handleSwitchChange = (event) => {
     setDefectStructuralSwitch({ ...defectStructuralSwitch, [event.target.name]: event.target.checked });
@@ -231,7 +266,6 @@ async function executeQueryObjectURI (query) {
 
 
 
-
  //////////////////////////////////////////////////////////////////////////////////////CLASSIFICATION
 //check Classification
 const toggleClassification = () => {
@@ -241,6 +275,8 @@ const toggleClassification = () => {
    }else{
      setCheckClassification(false)
      setClassification('')
+     setSparqlClassification('')
+     setSparqlComment('')
    }
 };
 
@@ -312,38 +348,40 @@ const optionClassification = ()=>{
 //define dropdown option
 
 const defineClassificationOptions = ()=>{
+
+  
  if (document.getElementById("toggleCDO").checked===true) {
    var OptionCDO = CDOclasses
  } else {
-   var OptionCDO = []
+   OptionCDO = []
  }
  
  
  if (document.getElementById("toggleMWVDTimber").checked===true) {
    var OptionMWVDTimber = MWVDTimberclasses
  } else {
-   var OptionMWVDTimber = []
+   OptionMWVDTimber = []
  }
  
  
  if (document.getElementById("toggleMWVDNaturalStone").checked===true) {
    var OptionMWVDNaturalSTone = MWVDNaturalStoneclasses
  } else {
-   var OptionMWVDNaturalSTone = []
+   OptionMWVDNaturalSTone = []
  }
  
  
  if (document.getElementById("toggleMWVDPaper").checked===true) {
    var OptionMWVDPaper = MWVDPaperclasses
  } else {
-   var OptionMWVDPaper = []
+    OptionMWVDPaper = []
  }
  
  
  if (document.getElementById("toggleMWVDTextile").checked===true) {
    var OptionMWVDTextile = MWVDTextileclasses
  } else {
-   var OptionMWVDTextile =[]
+   OptionMWVDTextile =[]
  }
 
    // if (document.getElementById("Option_CLASS_ONTOLOGY").checked===true) {
@@ -352,9 +390,9 @@ const defineClassificationOptions = ()=>{
   //   Option_CLASS_ONTOLOGY =[]
   // }
  
-  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
-  //Add '.concat(Option_CLASS_ONTOLOGY)
- }
+ setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
+ //Add '.concat(Option_CLASS_ONTOLOGY)
+}
 
 
 //convert to dropdown
@@ -367,11 +405,28 @@ let myClassificationOptions = classificationOptions.map((element, i) => {
 //set selected dropdown as state
 const handleClassificationChange = (event) => {
  setClassification(event.target.value);
+
+
+
+ if(CDOclasses.includes(event.target.value) === true){
+  var classPrefix = 'cdo:'
+ }
+ if(MWVDTimberclasses.includes(event.target.value) === true || MWVDNaturalStoneclasses.includes(event.target.value) === true || MWVDPaperclasses.includes(event.target.value) === true || MWVDTextileclasses.includes(event.target.value) === true){
+   classPrefix = 'mwv-d:'
+ }
+//  if(CLASS_ONTOLOGY_IMPORT.includes(event.target.value) === true){
+//    classPrefix = 'CLASS_ONTOLOGY_PREFIX'
+//  }
+
+
+ setSparqlClassification(`inst:${label}_${objectGuid} a ${classPrefix}${event.target.value} .`)
 };
 
 
+
+
  //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-// //check Properties
+//check Properties
 //  const toggleProperties = () => {
 //   if(document.getElementById("checkProperties").checked===true){
 //     setCheckProperties(true)
@@ -394,6 +449,7 @@ const handleClassificationChange = (event) => {
 //       return
 //     }
 // }
+
 
  //////////////////////////////////////////////////////////////////////////////////////TASK
 //check Task
@@ -488,6 +544,7 @@ const optionOntologyTask = ()=>{
           <label for="toggle_TASK_ONTOLOGY" className="checkBox"> TASK_ONTOLOGY_NAME </label> 
         </Typography> */}
 
+
           <div className="ontologyTaskOptionsDropdown">    
                 <FormControl variant="outlined" className="dropdownComponent">
 
@@ -573,7 +630,7 @@ const optionCommentTask = ()=>{
   if(checkCommentTask === true){
     return(
       <div>
-        <Typography className="taskOption" gutterBottom>
+        <Typography className="ontologyTaskOptionsDropdown" gutterBottom>
           <form  noValidate autoComplete="off">
           <TextField
             className="descriptionForm"
@@ -597,7 +654,6 @@ const optionCommentTask = ()=>{
 const handleCommentTaskChange = (event) => {
   setCommentTask(event.target.value);
 };
-
 
  //////////////////////////////////////////////////////////////////////////////////////DOCUMENTS
 // //check Documents
@@ -631,9 +687,11 @@ const handleCommentTaskChange = (event) => {
 const toggleComment = () => {
   if(document.getElementById("checkComment").checked===true){
     setCheckComment(true)
+
    }else{
      setCheckComment(false)
      setComment('')
+     setSparqlComment('')
    }
 };
 
@@ -668,12 +726,18 @@ const optionComment = ()=>{
 
 //set input as state
 const handleCommentChange = (event) => {
-  setComment(event.target.value);
+  
+  setComment(event.target.value)
+
+  setSparqlComment(`inst:${label}_${objectGuid} rdfs:label "${event.target.value}" .`)
+  // setSparqlComment(`inst:${label}_${objectGuid} rdfs:label "${comment}" .`) => change is cycle to late since async
+
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////LABEL
 
+
+//////////////////////////////////////////////////////////////////////////////////////LABEL AND DATE
 
 const toggleNewState = () => {
   if(document.getElementById("checkNewState").checked===true){
@@ -688,7 +752,7 @@ const labelAndDate = ()=>{
   if (checkNewState===false) {
     return(
     <Typography gutterBottom>
-    <TextField  className="nameForm" id="label" label="Unique name" variant="outlined" 
+    <TextField  className="nameForm" id="label" label="Unique name" variant="outlined"
                 value={label}
                 onChange={handleLabelChange}/>
   
@@ -710,13 +774,11 @@ const labelAndDate = ()=>{
 }
 
 
-
+//set input as state
 const handleLabelChange = (event) => {
   const givenName = event.target.value
   setLabel(givenName.replace(/\s/g, ''));
 };
-
-
 
 const handleDateChange = (event) => {
   setDate(event.target.value)
@@ -735,77 +797,38 @@ const handleSubmit = () => {
 };
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////DISPLAY IF DAMAGE SELECTED
 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
+  return (
+    <div>
 
-const optionResolveUpdate = ()=>{
-  if (damageSelection === '') {
-    return    
-  } else {
-    return(
-      <div>
-          <Typography className ="domain" gutterBottom>
-            <form>
-              <div className="radio">
-                <input id="optionResolve" type="radio" name="optradio" onClick={()=> {setRadioOptions("optionResolve")}}></input>
-                  <label for="optionResolve"> Resolve damage</label>
-              </div>
-              <div className="radio">
-                <input id="optionUpdate" type="radio" name="optradio" onClick={()=> {setRadioOptions("optionUpdate")}}></input>
-                  <label for="optionUpdate"> Update Damage </label>
-              </div>
-             </form>
-          </Typography>
-        <Typography gutterBottom>
-          {optionUpdate()}
-        </Typography>
-      </div>
-    )
-
-  }
-}
+      <Button variant="contained" size="small" color="primary" 
+                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 40, width: 160}}
+                        onClick={handleClickOpen}
+                  >test</Button>
 
 
 
-const setRadioOptions = (element) => {
-  document.getElementById(element).checked = true
-    setOptions(element)
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        Assign new damage
+        </DialogTitle>
+        <DialogContent dividers style={{width: "600px"}}>
+          
 
-};
+      <Button onClick={()=>testing()}>test</Button>
 
 
-
-
-const optionUpdate = ()=>{
-  if(options === 'optionResolve'){
-    return(
-      <div>
-          <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' >Resolve damage</div>
+          <Typography style={{paddingBottom: "15px"}} gutterBottom>
+            Object GUID: {objectGuid}
           </Typography>
 
-          <Typography gutterBottom>
-            <TextField className="dateForm" id="date" variant="outlined" 
-              type="date"     
-              value={date}
-              onChange={handleDateChange}/>
-          </Typography>
-
-      </div>
-    )
-  } 
-
-
-  if(options === "optionUpdate"){
-      return(
-        <div>
-
-
+          
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' >Damage type</div>
           </Typography>
           
-          {/* <Typography className ="domain" gutterBottom>
+          <Typography className ="domain" gutterBottom>
             <form>
               <div className="radio">
                 <input id="Damage" type="radio" name="optradio" onClick={()=> {setRadio("Damage")}}></input>
@@ -820,7 +843,7 @@ const optionUpdate = ()=>{
                 <label for="DamageElement"> Damage element </label>
               </div>
              </form>
-          </Typography> */}
+          </Typography>
 
 
           <div>
@@ -884,15 +907,15 @@ const optionUpdate = ()=>{
           </Typography>
           <Typography>
             <input type="checkbox" id="checkTask" className="checkBox" onClick={()=>toggleTask()}></input>
-            <label for="checkTask" className="checkBox" >Assign task for damage repair</label> 
+            <label for="checkTask" className="checkBox" >Order repair task</label> 
           </Typography>
           <Typography gutterBottom>
             {optionTask()}
           </Typography>
 
 
-
-          {/* <Typography className='interTitleBox' gutterBottom>
+{/* 
+          <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > External documents</div>
           </Typography>
           <Typography>
@@ -916,7 +939,7 @@ const optionUpdate = ()=>{
             {optionComment()}
           </Typography>
 
-
+      
 
           <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > Additional information</div>
@@ -928,59 +951,6 @@ const optionUpdate = ()=>{
             <input type="checkbox" id="checkNewState" className="checkBox" onClick={()=>toggleNewState()}></input>
             <label for="checkNewState" className="checkBox" >Assign new damage state to object</label> 
           </Typography>
-
-        </div>
-      )
-    }
-}
-
-  
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////RETURN
-  return (
-    <div>
-
-      <Button variant="contained" size="small" color="primary" 
-                        style={{marginLeft: "30%", marginBottom: 10, marginTop: 10, width: 160}}
-                        onClick={handleClickOpen}
-                  >Update</Button>
-
-
-
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-        Update damage state
-        </DialogTitle>
-        <DialogContent dividers style={{width: "600px"}}>
-          
-
-          <Typography style={{paddingBottom: "15px"}} gutterBottom>
-            Object GUID: {objectGuid}
-          </Typography>
-
-
-
-
-          <div className="dropdown">
-          <FormControl variant="outlined" className="dropdownComponent">
-            <Select
-              native
-              value={damageSelection}
-              onChange={handleDamageSelection}
-            >
-              <option value="">No damage selected</option>
-              <option value="Damage_Area_1">Damage_Area_1</option>
-              <option value="Damage_Area_2">Damage_Area_2</option>
-              <option value="Damage_Element1">Damage_Element1</option>
-            </Select>
-          </FormControl>
-        </div>
-
-
-        <Typography gutterBottom>
-          {optionResolveUpdate()}
-        </Typography>
-
 
 
         </DialogContent>
@@ -995,7 +965,7 @@ const optionUpdate = ()=>{
       </Dialog>
     
     
-    
+
     
     
     
