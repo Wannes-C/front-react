@@ -111,7 +111,7 @@ export default function CustomizedDialogs() {
   const [checkCommentTask, setCheckCommentTask] = React.useState(false);
   const [commentTask, setCommentTask] = React.useState('');
 
-  // const [checkProperties, setCheckProperties] = React.useState(false);
+
   // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   const [checkNewState, setCheckNewState] = React.useState(false);
@@ -356,32 +356,6 @@ const handleClassificationChange = (event) => {
 };
 
 
-
-
- //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-//check Properties
-//  const toggleProperties = () => {
-//   if(document.getElementById("checkProperties").checked===true){
-//     setCheckProperties(true)
-//    }else{
-//      setCheckProperties(false)
-//    }
-// };
-
-// //display Properties
-// const optionProperties = ()=>{
-//   if(checkProperties === true){
-//     return(
-      
-//       <Typography className="domain" gutterBottom>
-//         [under construction]
-//       </Typography>
-
-//     )
-//   } else{
-//       return
-//     }
-// }
 
  //////////////////////////////////////////////////////////////////////////////////////TASK
 //check Task
@@ -808,20 +782,6 @@ const handleSubmit = () => {
           <Typography gutterBottom>
             {optionClassification()}
           </Typography>
-
-
-
-          {/* <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' > Properties</div>
-          </Typography>
-          <Typography>
-            <input type="checkbox" id="checkProperties" className="checkBox" onClick={()=>toggleProperties()}></input>
-            <label for="checkProperties" className="checkBox" >Assign properties</label> 
-          </Typography>
-          <Typography gutterBottom>
-            {optionProperties()}
-          </Typography> */}
-
 
 
 

@@ -115,7 +115,6 @@ export default function CustomizedDialogs() {
 
   const [checkClassification, setCheckClassification] = React.useState(false);
   const [checkNewState, setCheckNewState] = React.useState(false);
-  // const [checkProperties, setCheckProperties] = React.useState(false);
   // const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   
@@ -135,13 +134,11 @@ export default function CustomizedDialogs() {
       setDate('');
       setCheckClassification('')
       setOrderTask('');
-      setCheckOntologyTask(false)
       setCheckCommentTask(false)
       setCommentTask('')
       setCheckOntologyTask('')
       setOntologyTaskOptions([])
       setOntologyTask([])
-      // setCheckProperties('');
       // setCheckDocuments('');
       setCheckComment('');
       setDamageSelection('');
@@ -208,15 +205,7 @@ async function executeQueryObjectURI (query) {
 }
 
   //////////////////////////////////////////////////////////////////////////////////////TYPE
-  //set Radio and state after type selection
-  // const setRadio = (damageType) => {
-  //   document.getElementById(damageType).checked = true
-  //     setType(damageType)
 
-  //           // starts defining object URI
-  //           executeQueryObjectURI (queryObjectURI);
- 
-  // };
 
   const handleSwitchChange = (event) => {
     setDefectStructuralSwitch({ ...defectStructuralSwitch, [event.target.name]: event.target.checked });
@@ -370,30 +359,6 @@ const handleClassificationChange = (event) => {
 };
 
 
- //////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-// //check Properties
-//  const toggleProperties = () => {
-//   if(document.getElementById("checkProperties").checked===true){
-//     setCheckProperties(true)
-//    }else{
-//      setCheckProperties(false)
-//    }
-// };
-
-// //display Properties
-// const optionProperties = ()=>{
-//   if(checkProperties === true){
-//     return(
-      
-//       <Typography className="domain" gutterBottom>
-//         [under construction]
-//       </Typography>
-
-//     )
-//   } else{
-//       return
-//     }
-// }
 
  //////////////////////////////////////////////////////////////////////////////////////TASK
 //check Task
@@ -805,23 +770,6 @@ const optionUpdate = ()=>{
             <div className='interTitle' >Damage type</div>
           </Typography>
           
-          {/* <Typography className ="domain" gutterBottom>
-            <form>
-              <div className="radio">
-                <input id="Damage" type="radio" name="optradio" onClick={()=> {setRadio("Damage")}}></input>
-                  <label for="Damage"> Damage</label>
-              </div>
-              <div className="radio">
-                <input id="DamageArea" type="radio" name="optradio" onClick={()=> {setRadio("DamageArea")}}></input>
-                  <label for="DamageArea"> Damage area </label>
-              </div>
-              <div className="radio">
-               <input id="DamageElement" type="radio" name="optradio" onClick={()=> {setRadio("DamageElement")}}></input> 
-                <label for="DamageElement"> Damage element </label>
-              </div>
-             </form>
-          </Typography> */}
-
 
           <div>
             <FormGroup className ="switch">
@@ -862,20 +810,6 @@ const optionUpdate = ()=>{
           <Typography gutterBottom>
             {optionClassification()}
           </Typography>
-
-
-
-          {/* <Typography className='interTitleBox' gutterBottom>
-            <div className='interTitle' > Properties</div>
-          </Typography>
-          <Typography>
-            <input type="checkbox" id="checkProperties" className="checkBox" onClick={()=>toggleProperties()}></input>
-            <label for="checkProperties" className="checkBox" >Assign properties</label> 
-          </Typography>
-          <Typography gutterBottom>
-            {optionProperties()}
-          </Typography> */}
-
 
 
 
