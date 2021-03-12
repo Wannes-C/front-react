@@ -115,7 +115,7 @@ export default function CustomizedDialogs() {
 
   const [checkClassification, setCheckClassification] = React.useState(false);
   const [checkNewState, setCheckNewState] = React.useState(false);
-  // const [checkDocuments, setCheckDocuments] = React.useState(false);
+  const [checkDocuments, setCheckDocuments] = React.useState(false);
   const [checkComment, setCheckComment] = React.useState(false);
   
 
@@ -139,7 +139,7 @@ export default function CustomizedDialogs() {
       setCheckOntologyTask('')
       setOntologyTaskOptions([])
       setOntologyTask([])
-      // setCheckDocuments('');
+      setCheckDocuments('');
       setCheckComment('');
       setDamageSelection('');
       setClassificationOptions([])
@@ -565,31 +565,31 @@ const handleCommentTaskChange = (event) => {
 
 
  //////////////////////////////////////////////////////////////////////////////////////DOCUMENTS
-// //check Documents
-// const toggleDocuments = () => {
-//   if(document.getElementById("checkDocuments").checked===true){
-//     setCheckDocuments(true)
-//    }else{
-//      setCheckDocuments(false)
-//    }
-// };
+//check Documents
+const toggleDocuments = () => {
+  if(document.getElementById("checkDocuments").checked===true){
+    setCheckDocuments(true)
+   }else{
+     setCheckDocuments(false)
+   }
+};
 
-// //display Documents
-// const optionDocuments = ()=>{
-//   if(checkDocuments === true){
-//     return(
+//display Documents
+const optionDocuments = ()=>{
+  if(checkDocuments === true){
+    return(
       
-//       <Typography className="domain" gutterBottom>
-//         [under construction]
-//       </Typography>
+      <Typography className="domain" gutterBottom>
+        [under construction]
+      </Typography>
 
-//     )
-//   } else{
-//       return(
-//         <p></p>
-//       )
-//     }
-// }
+    )
+  } else{
+      return(
+        <p></p>
+      )
+    }
+}
 
  //////////////////////////////////////////////////////////////////////////////////////COMMENT
  //check Comment
@@ -826,7 +826,7 @@ const optionUpdate = ()=>{
 
 
 
-          {/* <Typography className='interTitleBox' gutterBottom>
+          <Typography className='interTitleBox' gutterBottom>
             <div className='interTitle' > External documents</div>
           </Typography>
           <Typography>
@@ -835,7 +835,7 @@ const optionUpdate = ()=>{
           </Typography>
           <Typography gutterBottom>
             {optionDocuments()}
-          </Typography> */}
+          </Typography>
 
 
 
