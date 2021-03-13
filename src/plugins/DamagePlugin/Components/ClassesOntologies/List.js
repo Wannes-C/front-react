@@ -23,7 +23,7 @@ const classificationOntologyLabels = [
     'Textile damage (MVW-D)'
 ]
 
-//assign prefex to be used with ontology's classes
+//assign prefix to be used with ontology's classes
 const classificationOntologyPrefixes = [
     'cdo:',
     'mvw-d:',

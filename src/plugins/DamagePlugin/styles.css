@@ -24,6 +24,17 @@
     border-color: #e92063;
   }
 
+  .pluginSubTitle{
+    background-color:	#fafafa ;
+    color: lightcoral;
+    width: 100%;
+    height: 46px;
+    opacity: 1;
+    transition: 0.8s;
+    border-bottom: 2px solid;
+    border-color: #e92063;
+  }
+
   
 .interTitleBox{
     /* background-color:	#eeeeee ; */

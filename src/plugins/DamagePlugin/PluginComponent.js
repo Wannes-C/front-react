@@ -6,7 +6,8 @@ import AppContext from "@context";
 import {miniDrawerWidth} from '@styles'
 import './styles.css'
 
-// import QueryChangeTabs from '../ProjectPlugin/QueryChangeTabs'
+
+import QueryChangeTabs from '../ProjectPlugin/QueryChangeTabs'
 
 // import components
 import CompAssign from './Components/CompAssign'
@@ -14,6 +15,7 @@ import CompSearch from './Components/CompSearch'
 import CompUpdate from './Components/CompUpdate'
 import CompEdit from './Components/CompEdit'
 import CompOverview from './Components/CompOverview'
+import CompDisplay from './Components/CompDisplay'
 //import test
 import Comptest from "./Components/testSPARQL";
 import Comptestingqueries from "./Components/testingqueries";
@@ -73,7 +75,7 @@ export default function MyPlugin() {
             <div>
 
               <div  className="pluginTitle" style={{paddingBottom: "12px", paddingTop: "12px"}}>
-                <Typography color="secondary" style={{marginLeft: "35%", marginRight: "65%"}} > DAMAGE PLUGIN </Typography>
+                <Typography color="secondary" style={{marginLeft: "33%", marginRight: "67%"}} > DAMAGE PLUGIN </Typography>
               </div>
 
   {/* buttons */}         
@@ -84,14 +86,14 @@ export default function MyPlugin() {
               <CompSearch></CompSearch>
               <CompOverview></CompOverview>
 
-              <Comptest/>
-              <Comptestingqueries/>
 
-              <div className='interTitleBox'></div>
+              {/* <Comptest/>
+              <Comptestingqueries/> */}
 
+              {/* <div className='interTitleBox'></div> */}
 
-
-              <Typography style={{paddingTop: "1px"}}>
+              <CompDisplay></CompDisplay>
+              <Typography style={{paddingTop: "12px", paddingBottom: "30px", marginLeft: '20px'}}>
                 Current object selection:
                 {(context.selection.length > 0) ? (
                   context.selection.map(item => {
@@ -102,13 +104,9 @@ export default function MyPlugin() {
                 )}
 
               </Typography>
+              
 
-              <Typography>
-                Damages occuring to selected objects:
-                <> no damage found</>
-              </Typography>
-            
-              {/* <QueryChangeTabs /> */}
+              <QueryChangeTabs />
 
             </div>
           </Drawer>{" "}

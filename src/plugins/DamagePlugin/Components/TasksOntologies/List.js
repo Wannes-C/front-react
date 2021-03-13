@@ -20,7 +20,7 @@ const taskOntologyLabels = [
     'Insects-and-fungi-prevention (MVW-T)',
 ]
 
-//assign prefex to be used with ontology's classes
+//assign prefix to be used with ontology's classes
 const taskOntologyPrefixes = [
     'mvw-t:',
     'mvw-t:',

@@ -398,7 +398,7 @@ export default function CustomizedDialogs() {
 
 const classificationOntologiesDisplay = classificationOntologyLabels.map((element, i) => {
   return(
-    <Typography className="domain">
+    <Typography className="ontologyTaskOptions">
       <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
       <label for={element} className="checkBoxClose"> {element}</label> 
    </Typography>
