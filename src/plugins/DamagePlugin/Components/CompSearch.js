@@ -19,13 +19,12 @@ import Checkbox from "@material-ui/core/Checkbox";
 import '../styles.css'
 
 //import ontology-classes for classification
-import MWVDTimberclasses from './ClassesOntologies/TimberMWVD'
-import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
-import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
-import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
-import CDOclasses from './ClassesOntologies/ConcreteCDO'
-// import IMPORT_MY_ONTOLOGY_ARRAY from './ClassesOntologies/MY_ONTOLOGY'
-    // add at optionClassification() (1x) and defineClassificationOptions() (2x)
+import {classificationOntologies, classificationOntologyLabels} from './ClassesOntologies/List'
+
+//import ontology-classes for tasks
+import {taskOntologies, taskOntologyLabels} from './TasksOntologies/List'
+
+  
 
 
 
@@ -93,6 +92,9 @@ export default function CustomizedDialogs() {
   // const [checkProperties, setCheckProperties] = React.useState(false);
 
   const [checkTask, setCheckTask] = React.useState(false);
+  const [ontologyTask, setOntologyTask] = React.useState([]);
+  const [ontologyTaskOptions, setOntologyTaskOptions] = React.useState([]);
+  const [checkOntologyTask, setCheckOntologyTask] = React.useState(false);
 
   const [checkDate, setCheckDate] = React.useState(false);
   const [dateOptions, setDateOptions] = React.useState('Exact');
@@ -113,8 +115,12 @@ export default function CustomizedDialogs() {
     setCheckClassification(false)
     setClassificationOptions([])
     setClassification([])
-    // setCheckProperties(false)
+
     setCheckTask(false)
+    setCheckOntologyTask(false)
+    setOntologyTaskOptions([])
+    setOntologyTask([])
+
     setCheckObjectGuid(false)
     setObjectGuid('')
     setCheckDate(false)
@@ -354,30 +360,7 @@ export default function CustomizedDialogs() {
               <Typography className="searchOptionElab">
                 Select ontologies for obtaining classification options
               </Typography>
-              <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggleCDO" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggleCDO" className="checkBoxClose" >Concrete Damage (CDO)</label> 
-              </Typography>
-              <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggleMWVDTimber" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggleMWVDTimber" className="checkBoxClose" >Timber damage (MVW-D)</label> 
-              </Typography>
-              <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggleMWVDNaturalStone" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggleMWVDNaturalStone" className="checkBox" >Natural stone damage (MVW-D)</label> 
-              </Typography>
-              <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggleMWVDPaper" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggleMWVDPaper" className="checkBox" >Paper damage (MVW-D)</label> 
-              </Typography>
-              <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggleMWVDTextile" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
-              </Typography>
-              {/* <Typography className="searchOptionElab">
-                <input type="checkbox" id="toggle_MY_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-                <label for="toggle_MY_ONTOLOGY" className="checkBox"> MY ONTOLOGY NAME </label> 
-              </Typography> */}
+              {classificationOntologiesDisplay}
               
        
        
@@ -411,54 +394,36 @@ export default function CustomizedDialogs() {
 
 
 
-        //define dropdown option
+// define classification ontologies display
 
-  const defineClassificationOptions = ()=>{
-    setClassification([])
+const classificationOntologiesDisplay = classificationOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="domain">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
 
-  if (document.getElementById("toggleCDO").checked===true) {
-    var OptionCDO = CDOclasses
-  } else {
-    OptionCDO = []
-  }
-  
-  
-  if (document.getElementById("toggleMWVDTimber").checked===true) {
-    var OptionMWVDTimber = MWVDTimberclasses
-  } else {
-    OptionMWVDTimber = []
-  }
-  
-  
-  if (document.getElementById("toggleMWVDNaturalStone").checked===true) {
-    var OptionMWVDNaturalSTone = MWVDNaturalStoneclasses
-  } else {
-    OptionMWVDNaturalSTone = []
-  }
-  
-  
-  if (document.getElementById("toggleMWVDPaper").checked===true) {
-    var OptionMWVDPaper = MWVDPaperclasses
-  } else {
-     OptionMWVDPaper = []
-  }
-  
-  
-  if (document.getElementById("toggleMWVDTextile").checked===true) {
-    var OptionMWVDTextile = MWVDTextileclasses
-  } else {
-    OptionMWVDTextile =[]
+
+//make options array
+
+ var i
+
+ const defineClassificationOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < classificationOntologyLabels.length; i++) {
+    if (document.getElementById(classificationOntologyLabels[i]).checked===true) {
+      //mapfunctie voor classificationOntologies[i]?
+      arraysPush.push(classificationOntologies[i])
+
+    } else {}
   }
 
-  // if (document.getElementById("Option_MY ONTOLOGY").checked===true) {
-  //   var Option_MY_ONTOLOGY = IMPORT_MY_ONTOLOGY_ARRAY
-  // } else {
-  //   Option_MY_ONTOLOGY =[]
-  // }
-
-  
-  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
-  //Add '.concat(Option_MY_ONTOLOGY)
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setClassificationOptions(mergedArraysPush)
  }
  
  
@@ -470,34 +435,6 @@ export default function CustomizedDialogs() {
  };
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////PROPERTIES
-
-    // //toggle use of Properties-filter
-    // const toggleProperties = () => {
-    //   if(document.getElementById("checkProperties").checked===true){
-    //     setCheckProperties(true)
-
-    //    }else{
-    //      setCheckProperties(false)
-    //    }
-    // };
-
-
-
-    // //return input
-    // const optionProperties = ()=>{
-    //   if(checkProperties === false){
-    //     return
-    //   }
-
-    //   if(checkProperties === true){
-    //     return(
-    //       <Typography className ="searchOptionElab" gutterBottom>
-    //           [Under construction]
-    //     </Typography>
-    //     )
-    //   }
-    // }
 
 
         ////////////////////////////////////////////////////////////////////////////////////////TASKS
@@ -522,12 +459,112 @@ export default function CustomizedDialogs() {
 
       if(checkTask === true){
         return(
-          <Typography className ="searchOptionElab" gutterBottom>
-              [Under construction]
-        </Typography>
+          <div>
+            <Typography className="taskOption">
+              <input type="checkbox" id="checkOntologyTask"  onClick={()=>toggleOntologyTask()}></input>
+              <label for="checkOntologyTask" className="checkBox" >Specify tasks</label> 
+            </Typography>
+            <Typography gutterBottom>
+              {optionOntologyTask()}
+            </Typography>
+        </div>
         )
       }
     }
+
+
+
+    const toggleOntologyTask = () => {
+      if(document.getElementById("checkOntologyTask").checked===true){
+        setCheckOntologyTask(true)
+       }else{
+        setCheckOntologyTask(false)
+       }
+    };
+
+
+
+
+    //////////////////////////////////////////////////display Ontology Task
+const optionOntologyTask = ()=>{
+  if(checkOntologyTask === true){
+    return(
+      <div>
+
+      <Typography className="ontologyTaskOptions">
+         Select ontologies for obtaining classification options
+       </Typography>
+       {taskOntologiesDisplay}
+
+
+          <div className="ontologyTaskOptionsDropdown">    
+                <FormControl variant="outlined" className="dropdownComponent">
+
+                  <Select
+                    multiple
+                    value={ontologyTask}
+                    onChange={handleOntologyTaskChange}
+                     renderValue={(selected) => selected.join(", ")}
+                  >
+                  {ontologyTaskOptions.map((element) => (
+                    <MenuItem key={element} value={element}>
+                      <Checkbox checked={ontologyTask.indexOf(element) > -1} />
+                      <ListItemText primary={element} />
+                    </MenuItem>
+                  ))}
+                  </Select>
+                </FormControl>
+              </div>
+
+
+
+      </div>
+    )
+  } else{
+      return
+    }
+}
+
+
+// define classification ontologies display
+
+const taskOntologiesDisplay = taskOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="ontologyTaskOptions">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
+
+
+//make options array
+
+ var i
+
+ const defineTaskOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < taskOntologyLabels.length; i++) {
+    if (document.getElementById(taskOntologyLabels[i]).checked===true) {
+
+      arraysPush.push(taskOntologies[i])
+
+    } else {}
+  }
+
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setOntologyTaskOptions(mergedArraysPush)
+ }
+
+
+
+        //set selected dropdown as state
+    const handleOntologyTaskChange = (event) => {
+      setOntologyTask(event.target.value);
+    };
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////DATE

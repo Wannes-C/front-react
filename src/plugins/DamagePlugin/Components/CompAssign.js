@@ -25,14 +25,12 @@ import '../styles.css'
 import {queryMultiple} from 'lbd-server'
 
 //import ontology-classes for classification
-import {classificationOntologies,classificationOntologyLabels} from './ClassesOntologies/List'
+import {classificationOntologies, classificationOntologyLabels} from './ClassesOntologies/List'
 
-import FungiMWV from './TasksOntologies/FungiMWV'
-import InsectMWV from './TasksOntologies/InsectMWV'
-import PreventionMWV from './TasksOntologies/PreventionMWV'
-import TimberMWV from './TasksOntologies/TimberMWV'
-// import TASK_ONTOLOGY_IMPORT from './TasksOntologies/TASK_ONTOLOGY'
-    //->search for 'TASK_ONTOLOGY'
+//import ontology-classes for tasks
+import {taskOntologies, taskOntologyLabels} from './TasksOntologies/List'
+
+
 
 
 const styles = (theme) => ({
@@ -385,26 +383,7 @@ const optionOntologyTask = ()=>{
       <Typography className="ontologyTaskOptions">
          Select ontologies for obtaining classification options
        </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleTimberMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleTimberMVWT" className="checkBoxClose" >Degraded timber repair (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleFungiMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleFungiMVWT" className="checkBoxClose" >Fungi control (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleInsectMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleInsectMVWT" className="checkBox" >Insect control (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptionsDropdown">
-         <input type="checkbox" id="togglePreventionMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="togglePreventionMVWT" className="checkBox" >Insects-and-fungi-prevention (MVW-T)</label> 
-       </Typography>
-       {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_TASK_ONTOLOGY" className="checkBox" onClick={()=>defineTaskOptions()}></input>
-          <label for="toggle_TASK_ONTOLOGY" className="checkBox"> TASK_ONTOLOGY_NAME </label> 
-        </Typography> */}
+       {taskOntologiesDisplay}
 
 
           <div className="ontologyTaskOptionsDropdown">    
@@ -436,49 +415,38 @@ const optionOntologyTask = ()=>{
 }
 
 
-        //define dropdown option
+// define classification ontologies display
 
-        const defineTaskOptions = ()=>{
-          setOntologyTask([])
-      
-        if (document.getElementById("toggleTimberMVWT").checked===true) {
-          var OptionTimberMVWT = TimberMWV
-        } else {
-          OptionTimberMVWT = []
-        }
-        
-        
-        if (document.getElementById("toggleFungiMVWT").checked===true) {
-          var OptionFungiMVWT = FungiMWV
-        } else {
-          OptionFungiMVWT = []
-        }
-        
-        
-        if (document.getElementById("toggleInsectMVWT").checked===true) {
-          var OptionInsectMVWT = InsectMWV
-        } else {
-          OptionInsectMVWT = []
-        }
-        
-        
-        if (document.getElementById("togglePreventionMVWT").checked===true) {
-          var OptionPreventionMVWT = PreventionMWV
-        } else {
-          OptionPreventionMVWT = []
-        }
-        
-      
-        // if (document.getElementById("Option_TASK_ONTOLOGY").checked===true) {
-        //   var Option_TASK_ONTOLOGY = TASK_ONTOLOGY_IMPORT
-        // } else {
-        //   Option_TASK_ONTOLOGY =[]
-        // }
-      
-        
-        setOntologyTaskOptions(OptionTimberMVWT.concat(OptionFungiMVWT).concat(OptionInsectMVWT).concat(OptionPreventionMVWT))
-        //Add '.concat(Option_TASK_ONTOLOGY)
-       }
+const taskOntologiesDisplay = taskOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="ontologyTaskOptions">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
+
+
+//make options array
+
+ var i
+
+ const defineTaskOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < taskOntologyLabels.length; i++) {
+    if (document.getElementById(taskOntologyLabels[i]).checked===true) {
+
+      arraysPush.push(taskOntologies[i])
+
+    } else {}
+  }
+
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setOntologyTaskOptions(mergedArraysPush)
+ }
+
 
 
         //set selected dropdown as state

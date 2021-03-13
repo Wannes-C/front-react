@@ -25,20 +25,10 @@ import '../styles.css'
 import {queryMultiple} from 'lbd-server'
 
 //import ontology-classes for classification
-import MWVDTimberclasses from './ClassesOntologies/TimberMWVD'
-import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
-import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
-import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
-import CDOclasses from './ClassesOntologies/ConcreteCDO'
-// import CLASS_ONTOLOGY_IMPORT from './ClassesOntologies/CLASS_ONTOLOGY'
-    //->search for 'CLASS_ONTOLOGY'
+import {classificationOntologies,classificationOntologyLabels} from './ClassesOntologies/List'
 
-import FungiMWV from './TasksOntologies/FungiMWV'
-import InsectMWV from './TasksOntologies/InsectMWV'
-import PreventionMWV from './TasksOntologies/PreventionMWV'
-import TimberMWV from './TasksOntologies/TimberMWV'
-// import TASK_ONTOLOGY_IMPORT from './TasksOntologies/TASK_ONTOLOGY'
-    //->search for 'TASK_ONTOLOGY'
+//import ontology-classes for tasks
+import {taskOntologies, taskOntologyLabels} from './TasksOntologies/List'
 
 
 
@@ -243,30 +233,7 @@ const optionClassification = ()=>{
        <Typography className="domain">
          Select ontologies for obtaining classification options
        </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleCDO" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleCDO" className="checkBoxClose" >Concrete Damage (CDO)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDTimber" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDTimber" className="checkBoxClose" >Timber damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDNaturalStone" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDNaturalStone" className="checkBox" >Natural stone damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDPaper" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDPaper" className="checkBox" >Paper damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDTextile" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
-       </Typography>
-       {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_CLASS_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-          <label for="toggle_CLASS_ONTOLOGY" className="checkBox"> CLASS_ONTOLOGY_NAME </label> 
-        </Typography> */}
+       {classificationOntologiesDisplay}
 
 
        <Typography className="domain">
@@ -296,53 +263,36 @@ const optionClassification = ()=>{
 }
 
 
+// define classification ontologies display
+
+const classificationOntologiesDisplay = classificationOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="domain">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
 
 
-//define dropdown option
+//make options array
 
-const defineClassificationOptions = ()=>{
- if (document.getElementById("toggleCDO").checked===true) {
-   var OptionCDO = CDOclasses
- } else {
-   var OptionCDO = []
- }
- 
- 
- if (document.getElementById("toggleMWVDTimber").checked===true) {
-   var OptionMWVDTimber = MWVDTimberclasses
- } else {
-   var OptionMWVDTimber = []
- }
- 
- 
- if (document.getElementById("toggleMWVDNaturalStone").checked===true) {
-   var OptionMWVDNaturalSTone = MWVDNaturalStoneclasses
- } else {
-   var OptionMWVDNaturalSTone = []
- }
- 
- 
- if (document.getElementById("toggleMWVDPaper").checked===true) {
-   var OptionMWVDPaper = MWVDPaperclasses
- } else {
-   var OptionMWVDPaper = []
- }
- 
- 
- if (document.getElementById("toggleMWVDTextile").checked===true) {
-   var OptionMWVDTextile = MWVDTextileclasses
- } else {
-   var OptionMWVDTextile =[]
- }
+ var i
 
-   // if (document.getElementById("Option_CLASS_ONTOLOGY").checked===true) {
-  //   var Option_CLASS_ONTOLOGY = CLASS_ONTOLOGY_IMPORT
-  // } else {
-  //   Option_CLASS_ONTOLOGY =[]
-  // }
- 
-  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
-  //Add '.concat(Option_CLASS_ONTOLOGY)
+ const defineClassificationOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < classificationOntologyLabels.length; i++) {
+    if (document.getElementById(classificationOntologyLabels[i]).checked===true) {
+      //mapfunctie voor classificationOntologies[i]?
+      arraysPush.push(classificationOntologies[i])
+
+    } else {}
+  }
+
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setClassificationOptions(mergedArraysPush)
  }
 
 
@@ -432,26 +382,7 @@ const optionOntologyTask = ()=>{
       <Typography className="ontologyTaskOptions">
          Select ontologies for obtaining classification options
        </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleTimberMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleTimberMVWT" className="checkBoxClose" >Degraded timber repair (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleFungiMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleFungiMVWT" className="checkBoxClose" >Fungi control (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptions">
-         <input type="checkbox" id="toggleInsectMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="toggleInsectMVWT" className="checkBox" >Insect control (MVW-T)</label> 
-       </Typography>
-       <Typography className="ontologyTaskOptionsDropdown">
-         <input type="checkbox" id="togglePreventionMVWT" className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
-         <label for="togglePreventionMVWT" className="checkBox" >Insects-and-fungi-prevention (MVW-T)</label> 
-       </Typography>
-       {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_TASK_ONTOLOGY" className="checkBox" onClick={()=>defineTaskOptions()}></input>
-          <label for="toggle_TASK_ONTOLOGY" className="checkBox"> TASK_ONTOLOGY_NAME </label> 
-        </Typography> */}
+       {taskOntologiesDisplay}
 
           <div className="ontologyTaskOptionsDropdown">    
                 <FormControl variant="outlined" className="dropdownComponent">
@@ -482,49 +413,37 @@ const optionOntologyTask = ()=>{
 }
 
 
-        //define dropdown option
+// define classification ontologies display
 
-        const defineTaskOptions = ()=>{
-          setOntologyTask([])
-      
-        if (document.getElementById("toggleTimberMVWT").checked===true) {
-          var OptionTimberMVWT = TimberMWV
-        } else {
-          OptionTimberMVWT = []
-        }
-        
-        
-        if (document.getElementById("toggleFungiMVWT").checked===true) {
-          var OptionFungiMVWT = FungiMWV
-        } else {
-          OptionFungiMVWT = []
-        }
-        
-        
-        if (document.getElementById("toggleInsectMVWT").checked===true) {
-          var OptionInsectMVWT = InsectMWV
-        } else {
-          OptionInsectMVWT = []
-        }
-        
-        
-        if (document.getElementById("togglePreventionMVWT").checked===true) {
-          var OptionPreventionMVWT = PreventionMWV
-        } else {
-          OptionPreventionMVWT = []
-        }
-        
-      
-        // if (document.getElementById("Option_TASK_ONTOLOGY").checked===true) {
-        //   var Option_TASK_ONTOLOGY = TASK_ONTOLOGY_IMPORT
-        // } else {
-        //   Option_TASK_ONTOLOGY =[]
-        // }
-      
-        
-        setOntologyTaskOptions(OptionTimberMVWT.concat(OptionFungiMVWT).concat(OptionInsectMVWT).concat(OptionPreventionMVWT))
-        //Add '.concat(Option_TASK_ONTOLOGY)
-       }
+const taskOntologiesDisplay = taskOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="ontologyTaskOptions">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineTaskOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
+
+
+//make options array
+
+ var i
+
+ const defineTaskOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < taskOntologyLabels.length; i++) {
+    if (document.getElementById(taskOntologyLabels[i]).checked===true) {
+
+      arraysPush.push(taskOntologies[i])
+
+    } else {}
+  }
+
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setOntologyTaskOptions(mergedArraysPush)
+ }
 
 
         //set selected dropdown as state
