@@ -25,13 +25,7 @@ import '../styles.css'
 import {queryMultiple} from 'lbd-server'
 
 //import ontology-classes for classification
-import MWVDTimberclasses from './ClassesOntologies/TimberMWVD'
-import MWVDNaturalStoneclasses from './ClassesOntologies/NaturalStoneMWVD'
-import MWVDPaperclasses from './ClassesOntologies/PaperMWVD'
-import MWVDTextileclasses from './ClassesOntologies/TextileMWVD'
-import CDOclasses from './ClassesOntologies/ConcreteCDO'
-// import CLASS_ONTOLOGY_IMPORT from './ClassesOntologies/CLASS_ONTOLOGY'
-    //->search for 'CLASS_ONTOLOGY'
+import {classificationOntologies,classificationOntologyLabels} from './ClassesOntologies/List'
 
 import FungiMWV from './TasksOntologies/FungiMWV'
 import InsectMWV from './TasksOntologies/InsectMWV'
@@ -239,30 +233,7 @@ const optionClassification = ()=>{
        <Typography className="domain">
          Select ontologies for obtaining classification options
        </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleCDO" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleCDO" className="checkBoxClose" >Concrete Damage (CDO)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDTimber" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDTimber" className="checkBoxClose" >Timber damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDNaturalStone" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDNaturalStone" className="checkBox" >Natural stone damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDPaper" className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDPaper" className="checkBox" >Paper damage (MVW-D)</label> 
-       </Typography>
-       <Typography className="domain">
-         <input type="checkbox" id="toggleMWVDTextile" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-         <label for="toggleMWVDTextile" className="checkBox" >Textile damage (MVW-D)</label> 
-       </Typography>
-       {/* <Typography className="domain">
-          <input type="checkbox" id="toggle_CLASS_ONTOLOGY" className="checkBox" onClick={()=>defineClassificationOptions()}></input>
-          <label for="toggle_CLASS_ONTOLOGY" className="checkBox"> CLASS_ONTOLOGY_NAME </label> 
-        </Typography> */}
+       {classificationOntologiesDisplay}
 
 
        <Typography className="domain">
@@ -294,52 +265,38 @@ const optionClassification = ()=>{
 
 
 
-//define dropdown option
+// define classification ontologies display
 
-const defineClassificationOptions = ()=>{
- if (document.getElementById("toggleCDO").checked===true) {
-   var OptionCDO = CDOclasses
- } else {
-   OptionCDO = []
- }
- 
- 
- if (document.getElementById("toggleMWVDTimber").checked===true) {
-   var OptionMWVDTimber = MWVDTimberclasses
- } else {
-   OptionMWVDTimber = []
- }
- 
- 
- if (document.getElementById("toggleMWVDNaturalStone").checked===true) {
-   var OptionMWVDNaturalSTone = MWVDNaturalStoneclasses
- } else {
-   OptionMWVDNaturalSTone = []
- }
- 
- 
- if (document.getElementById("toggleMWVDPaper").checked===true) {
-   var OptionMWVDPaper = MWVDPaperclasses
- } else {
-    OptionMWVDPaper = []
- }
- 
- 
- if (document.getElementById("toggleMWVDTextile").checked===true) {
-   var OptionMWVDTextile = MWVDTextileclasses
- } else {
-   OptionMWVDTextile =[]
+const classificationOntologiesDisplay = classificationOntologyLabels.map((element, i) => {
+  return(
+    <Typography className="domain">
+      <input type="checkbox" id={element} className="checkBoxClose" onClick={()=>defineClassificationOptions()}></input>
+      <label for={element} className="checkBoxClose"> {element}</label> 
+   </Typography>
+  ) 
+ })
+
+
+//make options array
+
+ var i
+
+ const defineClassificationOptions =()=>{
+
+  var arraysPush = []
+
+  for (i = 0; i < classificationOntologyLabels.length; i++) {
+    if (document.getElementById(classificationOntologyLabels[i]).checked===true) {
+      //mapfunctie voor classificationOntologies[i]?
+      arraysPush.push(classificationOntologies[i])
+
+    } else {}
+  }
+
+  var mergedArraysPush = [].concat.apply([], arraysPush);
+  setClassificationOptions(mergedArraysPush)
  }
 
-   // if (document.getElementById("Option_CLASS_ONTOLOGY").checked===true) {
-  //   var Option_CLASS_ONTOLOGY = CLASS_ONTOLOGY_IMPORT
-  // } else {
-  //   Option_CLASS_ONTOLOGY =[]
-  // }
- 
-  setClassificationOptions(OptionCDO.concat(OptionMWVDTimber).concat(OptionMWVDNaturalSTone).concat(OptionMWVDPaper).concat(OptionMWVDTextile))
-  //Add '.concat(Option_CLASS_ONTOLOGY)
- }
 
 
 //convert to dropdown
